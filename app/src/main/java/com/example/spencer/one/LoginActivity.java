@@ -20,6 +20,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final int REQUEST_SIGNUP = 0;
 
     // TESTING COMMIT - WAHOOO!!
+    //Tested committing to the testingBranch - YIPPEE!!
 
 
     @InjectView(R.id.input_email) EditText emailText;
