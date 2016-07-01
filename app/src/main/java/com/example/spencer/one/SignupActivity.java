@@ -11,14 +11,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.backendless.Backendless;
+import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
 
-    @InjectView(R.id.input_name)
-    EditText nameText;
+    @InjectView(R.id.input_username)
+    EditText usernameText;
     @InjectView(R.id.input_email)
     EditText emailText;
     @InjectView(R.id.input_password)
@@ -50,6 +55,8 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
+    // yo
+
     public void signup() {
         Log.d(TAG, "Signup");
 
@@ -65,11 +72,30 @@ public class SignupActivity extends AppCompatActivity {
         progressDialog.setMessage("Creating Account...");
         progressDialog.show();
 
-        String name = nameText.getText().toString();
+        String userName = usernameText.getText().toString();
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
 
         // TODO: Implement your own signup logic here.
+        BackendlessUser newUser = new BackendlessUser();
+        newUser.setEmail(email);
+        newUser.setProperty("userName",userName);
+        newUser.setPassword(password);
+
+        Backendless.UserService.register(newUser, new AsyncCallback<BackendlessUser>() {
+            @Override
+            public void handleResponse(BackendlessUser response) {
+                onSignupSuccess();
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                Toast.makeText(SignupActivity.this, "Registration Failed: "+fault.getMessage(),Toast.LENGTH_SHORT).show();
+
+                onSignupFailed();
+            }
+        });
+        
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
@@ -85,29 +111,28 @@ public class SignupActivity extends AppCompatActivity {
 
 
     public void onSignupSuccess() {
+        Toast.makeText(SignupActivity.this,"You are registered!", Toast.LENGTH_SHORT).show();
         signupButton.setEnabled(true);
         setResult(RESULT_OK, null);
         finish();
     }
 
     public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-
         signupButton.setEnabled(true);
     }
 
     public boolean validate() {
         boolean valid = true;
 
-        String name = nameText.getText().toString();
+        String name = usernameText.getText().toString();
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
 
         if (name.isEmpty() || name.length() < 3) {
-            nameText.setError("at least 3 characters");
+            usernameText.setError("at least 3 characters");
             valid = false;
         } else {
-            nameText.setError(null);
+            usernameText.setError(null);
         }
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
