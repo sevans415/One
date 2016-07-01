@@ -19,6 +19,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
 
+    // TESTING COMMIT - WAHOOO!!
 
 
     @InjectView(R.id.input_email) EditText emailText;
