@@ -123,6 +123,7 @@ public class SignupActivity extends AppCompatActivity {
         Toast.makeText(SignupActivity.this,"You are registered!", Toast.LENGTH_SHORT).show();
         signupButton.setEnabled(true);
         setResult(RESULT_OK, null);
+        startActivity(new Intent (this, LoginActivity.class));
         finish();
     }
 
