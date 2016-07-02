@@ -1,6 +1,7 @@
 package com.example.spencer.one;
 
 
+import android.content.Intent;
 import android.widget.Toast;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import butterknife.InjectView;
 
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
+    public boolean isRegistered = false;
 
     @InjectView(R.id.input_username)
     EditText usernameText;
@@ -82,31 +84,38 @@ public class SignupActivity extends AppCompatActivity {
         newUser.setProperty("userName",userName);
         newUser.setPassword(password);
 
+
         Backendless.UserService.register(newUser, new AsyncCallback<BackendlessUser>() {
             @Override
             public void handleResponse(BackendlessUser response) {
-                onSignupSuccess();
+                isRegistered = true;
+                //onSignupSuccess();
             }
 
             @Override
             public void handleFault(BackendlessFault fault) {
-                Toast.makeText(SignupActivity.this, "Registration Failed: "+fault.getMessage(),Toast.LENGTH_SHORT).show();
-
-                onSignupFailed();
+                Log.d("TAG",fault.getMessage());
+                Toast.makeText(SignupActivity.this, "Registration Failed: "+fault.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-        
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
                         // On complete call either onSignupSuccess or onSignupFailed
                         // depending on success
-                        onSignupSuccess();
-                        // onSignupFailed();
+                        if (isRegistered)
+                            onSignupSuccess();
+                        else onSignupFailed();
                         progressDialog.dismiss();
                     }
                 }, 3000);
+
+
+
+        //progressDialog.dismiss();
+        Log.d("TAG", "DIsmiseed progress dialog");
+
     }
 
 

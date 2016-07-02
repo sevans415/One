@@ -14,6 +14,9 @@ import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
+import com.dd.CircularProgressButton;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -21,6 +24,7 @@ import butterknife.InjectView;
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
+    private boolean isLoggedIn = false;
 
     // TESTING COMMIT - WAHOOO!!
     //Tested committing to the testingBranch - YIPPEE!!
@@ -28,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @InjectView(R.id.input_email) EditText emailText;
     @InjectView(R.id.input_password) EditText passwordText;
-    @InjectView(R.id.btn_login) Button loginButton;
+    @InjectView(R.id.btn_login) CircularProgressButton loginButton;
     @InjectView(R.id.link_signup) TextView signupLink;
 
     @Override
@@ -63,28 +67,44 @@ public class LoginActivity extends AppCompatActivity {
             onLoginFailed();
             return;
         }
+        loginButton.setIndeterminateProgressMode(true);
+        loginButton.setProgress(50);
 
-        loginButton.setEnabled(false);
+        //loginButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
+        /*final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
-        progressDialog.show();
+        progressDialog.show();*/
 
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
 
-        // TODO: Implement your own authentication logic here.
-
-        new android.os.Handler().postDelayed(
+        /*new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
                         // On complete call either onLoginSuccess or onLoginFailed
-                        onLoginSuccess();
+                        //onLoginSuccess();
                         // onLoginFailed();
                         progressDialog.dismiss();
                     }
                 }, 3000);
+                */
+        // moved this ^ from below the backendless login call
+
+        // TODO: Implement your own authentication logic here.
+        Backendless.UserService.login(email, password, new AsyncCallback<BackendlessUser>() {
+            @Override
+            public void handleResponse(BackendlessUser response) {
+                onLoginSuccess();
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                onLoginFailed();
+            }
+        });
+
     }
 
 
@@ -95,9 +115,9 @@ public class LoginActivity extends AppCompatActivity {
 
                 // TODO: Implement successful signup logic here
                 // By default we just finish the Activity and log them in automatically
-
-
-                this.finish();
+                Log.d("TAG", "Result received");
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                finish(); // finishes the process, eventually get rid of ^ line, leave
             }
         }
     }
@@ -109,12 +129,27 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLoginSuccess() {
+        loginButton.setProgress(100);
+        loginButton.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loginButton.setProgress(0);
+            }
+        }, 1000);
         loginButton.setEnabled(true);
+        startActivity(new Intent(LoginActivity.this, MainActivity.class));
         finish();
     }
 
     public void onLoginFailed() {
         Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        loginButton.setProgress(-1);
+        loginButton.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loginButton.setProgress(0);
+            }
+        }, 2000);
 
         loginButton.setEnabled(true);
     }
