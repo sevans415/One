@@ -72,7 +72,6 @@ public class LoginActivity extends AppCompatActivity {
         String password = passwordText.getText().toString();
 
         // TODO: Implement your own authentication logic here.
-
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
@@ -105,6 +104,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginSuccess() {
         loginButton.setEnabled(true);
+        startActivity(new Intent (this, MainActivity.class));
         finish();
     }
 
