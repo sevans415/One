@@ -1,6 +1,7 @@
 package com.example.spencer.one;
 
 
+import android.content.Intent;
 import android.widget.Toast;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -87,6 +88,7 @@ public class SignupActivity extends AppCompatActivity {
     public void onSignupSuccess() {
         signupButton.setEnabled(true);
         setResult(RESULT_OK, null);
+        startActivity(new Intent (this, LoginActivity.class));
         finish();
     }
 

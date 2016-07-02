@@ -20,6 +20,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final int REQUEST_SIGNUP = 0;
 
     // TESTING COMMIT - WAHOOO!!
+    //Tested committing to the testingBranch - YIPPEE!!
 
 
     @InjectView(R.id.input_email) EditText emailText;
@@ -71,7 +72,6 @@ public class LoginActivity extends AppCompatActivity {
         String password = passwordText.getText().toString();
 
         // TODO: Implement your own authentication logic here.
-
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                         // onLoginFailed();
                         progressDialog.dismiss();
                     }
-                }, 3000);
+                }, 3000); //trying
     }
 
 
@@ -104,6 +104,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginSuccess() {
         loginButton.setEnabled(true);
+        startActivity(new Intent (this, MainActivity.class));
         finish();
     }
 
