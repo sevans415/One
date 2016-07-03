@@ -2,12 +2,16 @@ package com.example.spencer.one;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.io.BackendlessUserFactory;
 import com.backendless.persistence.BackendlessDataQuery;
+import com.example.spencer.one.items.FriendsAdapter;
 import com.example.spencer.one.model.Friends;
 import com.example.spencer.one.model.Users;
 
@@ -18,24 +22,39 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String USER_NAME = "userName";
+    private FriendsAdapter friendsAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final TextView tvUsersFriends = (TextView) findViewById(R.id.tvData);
+        //final TextView tvUsersFriends = (TextView) findViewById(R.id.tvData);
 
         BackendlessUser currentUser = Backendless.UserService.CurrentUser();
 
         BackendlessUser user = Backendless.UserService.CurrentUser();
         BackendlessUser[] friends = (BackendlessUser[]) user.getProperty("Friends");
+
         ArrayList<BackendlessUser> friendList = new ArrayList<BackendlessUser>();
 
         friendList.addAll(Arrays.asList(friends));
+
+        RecyclerView friendsRecyclerView = (RecyclerView) findViewById(R.id.friends);
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        friendsRecyclerView.setLayoutManager(layoutManager);
+
+        friendsAdapter = new FriendsAdapter(friendList);
+        friendsRecyclerView.setAdapter(friendsAdapter);
+
+
+
+        /*
         String friendInfo = "";
 
         for (BackendlessUser friend : friendList) {
-            friendInfo += "Username :"+friend.getProperty("userName").toString()+"\n" +
+            friendInfo += "Username :"+friend.getProperty(USER_NAME).toString()+"\n" +
                     "Email: "+friend.getEmail()+"\n\n";
         }
 
@@ -43,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
             tvUsersFriends.setText("You have no friends");
         else
             tvUsersFriends.setText(friendInfo);
-
+*/
         /*
         StringBuilder whereClause = new StringBuilder();
         whereClause.append( "Users[friends]" );
