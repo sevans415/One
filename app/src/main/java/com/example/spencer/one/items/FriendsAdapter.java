@@ -32,10 +32,11 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendViewHolder> {
 
     @Override
     public void onBindViewHolder(FriendViewHolder holder, int position) {
-        BackendlessUser friend = friendsList.get(position);
-        holder.tvFriendUsername.setText(friend.getProperty(MainActivity.USER_NAME).toString());
-        holder.tvFriendEmail.setText(friend.getEmail());
-        holder.itemView.setTag(friend);
+        BackendlessUser friendObject = friendsList.get(position);
+        holder.tvFriendUsername.setText(friendObject.getProperty(MainActivity.USER_NAME).toString());
+        holder.friendObject = friendObject;
+        holder.itemView.setTag(friendObject);
+        holder.friendID = friendObject.getObjectId();
     }
 
     @Override

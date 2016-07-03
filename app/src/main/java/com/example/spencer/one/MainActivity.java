@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         //final TextView tvUsersFriends = (TextView) findViewById(R.id.tvData);
 
-        BackendlessUser currentUser = Backendless.UserService.CurrentUser();
+        //BackendlessUser currentUser = Backendless.UserService.CurrentUser();
 
         BackendlessUser user = Backendless.UserService.CurrentUser();
         BackendlessUser[] friends = (BackendlessUser[]) user.getProperty("Friends");

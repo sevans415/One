@@ -12,6 +12,7 @@ public class Friends {
     private String email;
     private String userName;
     private String objectId;
+    private String name;
     private ArrayList<BackendlessUser> friendList;
 
     public Friends() {
@@ -47,5 +48,13 @@ public class Friends {
 
     public void setFriendList(ArrayList<BackendlessUser> friendList) {
         this.friendList = friendList;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

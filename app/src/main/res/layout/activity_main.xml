@@ -21,13 +21,20 @@
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleMarginBottom="32dp"
             app:expandedTitleMarginEnd="64dp"
-            app:expandedTitleMarginStart="48dp"
+            app:expandedTitleMarginStart="64dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Add New Friend"/>
+                android:textColor="@color/cpb_blue_dark"
+                android:background="@drawable/connect"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="add new friend"
+                android:textSize="12sp "/>
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
@@ -39,11 +46,4 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/addButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="10dp"
-        android:src="@android:drawable/ic_input_add" />
 </android.support.design.widget.CoordinatorLayout>
