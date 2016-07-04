@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.backendless.BackendlessUser;
 import com.example.spencer.one.MainActivity;
 import com.example.spencer.one.R;
+import com.example.spencer.one.model.Friends;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +18,11 @@ import java.util.List;
  */
 public class FriendsAdapter extends RecyclerView.Adapter<FriendViewHolder> {
 
-    List<BackendlessUser> friendsList = new ArrayList<>();
+    private ArrayList<Friends> friendsList;
 
-    public FriendsAdapter(List<BackendlessUser> friendsList) {
-        this.friendsList = friendsList;
+    public FriendsAdapter(ArrayList<Friends> friendsIDList) {
+        friendsList = new ArrayList<>(friendsIDList.size());
+        friendsList = friendsIDList;
     }
 
     @Override
@@ -32,11 +34,14 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendViewHolder> {
 
     @Override
     public void onBindViewHolder(FriendViewHolder holder, int position) {
-        BackendlessUser friendObject = friendsList.get(position);
-        holder.tvFriendUsername.setText(friendObject.getProperty(MainActivity.USER_NAME).toString());
-        holder.friendObject = friendObject;
+        Friends friendObject = friendsList.get(position);
+        String friendUsername;
+        if (friendObject.getActualName() != null)
+            friendUsername = friendObject.getActualName();
+        else friendUsername = friendObject.getUserName();
+        holder.tvFriendUsername.setText(friendUsername);
         holder.itemView.setTag(friendObject);
-        holder.friendID = friendObject.getObjectId();
+        holder.friendID = friendObject.getFriendId();
     }
 
     @Override

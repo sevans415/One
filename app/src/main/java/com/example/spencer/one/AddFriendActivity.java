@@ -63,10 +63,10 @@ public class AddFriendActivity extends AppCompatActivity {
                 }
 
                 //Log.d("TAG", "new friend list: "+newFriendList.toString());
-                //currentUser.setProperty("Friends", newFriendList);
-                Backendless.UserService.update(currentUser).setProperty("Friends", newFriendList);
-                //Backendless.UserService.update(currentUser, new AsyncCallback<BackendlessUser>() {
-                   /* @Override
+                currentUser.setProperty("Friends", newFriendList);
+                //Backendless.UserService.update(currentUser).setProperty("Friends", newFriendList);
+                Backendless.UserService.update(currentUser, new AsyncCallback<BackendlessUser>() {
+                    @Override
                     public void handleResponse(BackendlessUser response) {
                         Log.d("TAG","async came back: "+response.toString());
                         finish();
@@ -77,7 +77,7 @@ public class AddFriendActivity extends AppCompatActivity {
                         Toast.makeText(AddFriendActivity.this, "Error: "+fault.getMessage(), Toast.LENGTH_SHORT).show();
                         Log.d("TAG", "updating users friends error: "+fault.getMessage());
                     }
-                }); */
+                });
             }
 
             @Override

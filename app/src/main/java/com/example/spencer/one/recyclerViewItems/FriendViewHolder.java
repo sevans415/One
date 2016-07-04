@@ -18,7 +18,6 @@ public class FriendViewHolder extends RecyclerView.ViewHolder {
 
     public static final String FRIEND_ID = "friendID";
     public TextView tvFriendUsername;
-    public BackendlessUser friendObject;
     public String friendID;
 
     public FriendViewHolder(final View itemView) {

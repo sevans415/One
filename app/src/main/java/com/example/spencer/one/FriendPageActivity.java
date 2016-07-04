@@ -27,9 +27,9 @@ public class FriendPageActivity extends AppCompatActivity {
         tvFriendEmail = (TextView) findViewById(R.id.tvFriendEmail);
         tvFriendUsername = (TextView) findViewById(R.id.tvFriendUsername);
 
-        Bundle friendEmailBundle = getIntent().getExtras();
-        if (friendEmailBundle != null) {
-            friendID = friendEmailBundle.getString(FriendViewHolder.FRIEND_ID);
+        Bundle friendIdBundle = getIntent().getExtras();
+        if (friendIdBundle != null) {
+            friendID = friendIdBundle.getString(FriendViewHolder.FRIEND_ID);
         }
 
         Backendless.Persistence.of(Users.class).findById(friendID, new AsyncCallback<Users>() {

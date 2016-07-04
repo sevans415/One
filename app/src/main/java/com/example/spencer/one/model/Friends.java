@@ -9,21 +9,28 @@ import java.util.ArrayList;
  */
 public class Friends {
 
-    private String email;
+    private String currentUserId;
+    private String friendId;
     private String userName;
-    private String objectId;
-    private String name;
-    private ArrayList<BackendlessUser> friendList;
+    private String actualName;
 
     public Friends() {
     }
 
-    public String getEmail() {
-        return email;
+    public String getCurrentUserId() {
+        return currentUserId;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setCurrentUserId(String currentUserId) {
+        this.currentUserId = currentUserId;
+    }
+
+    public String getFriendId() {
+        return friendId;
+    }
+
+    public void setFriendId(String friendId) {
+        this.friendId = friendId;
     }
 
     public String getUserName() {
@@ -34,27 +41,11 @@ public class Friends {
         this.userName = userName;
     }
 
-    public String getObjectId() {
-        return objectId;
+    public String getActualName() {
+        return actualName;
     }
 
-    public void setObjectId(String objectId) {
-        this.objectId = objectId;
-    }
-
-    public ArrayList<BackendlessUser> getFriendList() {
-        return friendList;
-    }
-
-    public void setFriendList(ArrayList<BackendlessUser> friendList) {
-        this.friendList = friendList;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setActualName(String actualName) {
+        this.actualName = actualName;
     }
 }
