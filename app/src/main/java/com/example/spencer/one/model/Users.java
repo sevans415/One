@@ -1,9 +1,11 @@
 package com.example.spencer.one.model;
 
+import com.backendless.BackendlessUser;
+
 /**
  * Created by spencerevans on 7/2/16.
  */
-public class Users {
+public class Users extends BackendlessUser {
 
     private String email;
     private String userName;

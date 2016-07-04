@@ -1,55 +1,42 @@
 package com.example.spencer.one;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.LinearLayout;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
-import com.backendless.io.BackendlessUserFactory;
-import com.backendless.persistence.BackendlessDataQuery;
-import com.example.spencer.one.items.FriendsAdapter;
-import com.example.spencer.one.model.Friends;
-import com.example.spencer.one.model.Users;
+import com.example.spencer.one.recyclerViewItems.FriendsAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String USER_NAME = "userName";
+    public static final int ADD_FRIEND_REQUEST_CODE = 1;
     private FriendsAdapter friendsAdapter;
+    private BackendlessUser[] friends;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //final TextView tvUsersFriends = (TextView) findViewById(R.id.tvData);
+        addFriendOnButtonClick();
+
+        initFriendsListView();
+
+
 
         //BackendlessUser currentUser = Backendless.UserService.CurrentUser();
-
-        BackendlessUser user = Backendless.UserService.CurrentUser();
-        BackendlessUser[] friends = (BackendlessUser[]) user.getProperty("Friends");
-
-        ArrayList<BackendlessUser> friendList = new ArrayList<BackendlessUser>();
-
-        friendList.addAll(Arrays.asList(friends));
-
-        RecyclerView friendsRecyclerView = (RecyclerView) findViewById(R.id.friends);
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        friendsRecyclerView.setLayoutManager(layoutManager);
-
-        friendsAdapter = new FriendsAdapter(friendList);
-        friendsRecyclerView.setAdapter(friendsAdapter);
-
-
-
         /*
         String friendInfo = "";
 
@@ -97,5 +84,48 @@ public class MainActivity extends AppCompatActivity {
         });
        // */
 
+    }
+
+    private void addFriendOnButtonClick() {
+        Button addFriendButton = (Button) findViewById(R.id.btnAddFriend);
+        addFriendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(MainActivity.this, AddFriendActivity.class),  ADD_FRIEND_REQUEST_CODE);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult (int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ADD_FRIEND_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                initFriendsListView();
+            }
+        }
+    }
+
+    private void initFriendsListView() {
+        BackendlessUser user = Backendless.UserService.CurrentUser();
+        try {
+            friends = (BackendlessUser[]) user.getProperty("Friends");
+        } catch (Exception e){
+            friends = null;
+        }
+        if (friends != null) {
+            ArrayList<BackendlessUser> friendList = new ArrayList<BackendlessUser>();
+            friendList.addAll(Arrays.asList(friends));
+
+            RecyclerView friendsRecyclerView = (RecyclerView) findViewById(R.id.friends);
+            final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+            friendsRecyclerView.setLayoutManager(layoutManager);
+
+            friendsAdapter = new FriendsAdapter(friendList);
+            friendsRecyclerView.setAdapter(friendsAdapter);
+        } else {
+            TextView tvNoFrands = (TextView) findViewById(R.id.tvNoFrands);
+            tvNoFrands.setVisibility(View.VISIBLE);
+        }
     }
 }

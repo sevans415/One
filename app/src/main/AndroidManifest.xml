@@ -23,7 +23,8 @@
             android:name=".SignupActivity"
             android:theme="@style/Theme.AppCompat.DayNight" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".FriendPageActivity"></activity>
+        <activity android:name=".FriendPageActivity" />
+        <activity android:name=".AddFriendActivity"></activity>
     </application>
 
 </manifest>

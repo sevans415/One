@@ -7,12 +7,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
-import com.backendless.BackendlessCollection;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-import com.backendless.persistence.BackendlessDataQuery;
-import com.example.spencer.one.items.FriendViewHolder;
-import com.example.spencer.one.model.Friends;
+import com.example.spencer.one.recyclerViewItems.FriendViewHolder;
 import com.example.spencer.one.model.Users;
 
 public class FriendPageActivity extends AppCompatActivity {
@@ -33,13 +30,11 @@ public class FriendPageActivity extends AppCompatActivity {
         Bundle friendEmailBundle = getIntent().getExtras();
         if (friendEmailBundle != null) {
             friendID = friendEmailBundle.getString(FriendViewHolder.FRIEND_ID);
-            Log.d("TAG", "friendID: "+friendID);
         }
 
         Backendless.Persistence.of(Users.class).findById(friendID, new AsyncCallback<Users>() {
             @Override
             public void handleResponse(Users response) {
-                Log.d("TAG", "response: "+response.getUserName());
                 tvFriendUsername.setText(response.getUserName());
                 tvFriendEmail.setText(response.getEmail());
 

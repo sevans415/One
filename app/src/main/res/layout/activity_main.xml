@@ -25,25 +25,36 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <Button
+                android:id="@+id/btnAddFriend"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColor="@color/cpb_blue_dark"
-                android:background="@drawable/connect"/>
+                android:background="@drawable/connect"
+                android:textColor="@color/cpb_blue_dark" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="add new friend"
-                android:textSize="12sp"/>
+                android:textSize="12sp" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/friends"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <TextView
+        android:id="@+id/tvNoFrands"
+        android:visibility="gone"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_friend_dialogue"/>
 
 </android.support.design.widget.CoordinatorLayout>
+
+

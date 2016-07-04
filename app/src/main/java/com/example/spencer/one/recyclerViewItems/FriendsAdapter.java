@@ -1,4 +1,4 @@
-package com.example.spencer.one.items;
+package com.example.spencer.one.recyclerViewItems;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
