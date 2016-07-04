@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
@@ -139,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void handleFault(BackendlessFault fault) {
+                Toast.makeText(MainActivity.this, "Error retrieving your friends: "+fault.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.d("TAG", "getting friend Id error: " + fault.getMessage());
             }
         });
