@@ -18,6 +18,8 @@ public class FriendPageActivity extends AppCompatActivity {
     private String friendEmail;
     private TextView tvFriendUsername;
     private String friendID;
+    private TextView tvFriendSnapchat;
+    private TextView tvFriendPhoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,8 @@ public class FriendPageActivity extends AppCompatActivity {
 
         tvFriendEmail = (TextView) findViewById(R.id.tvFriendEmail);
         tvFriendUsername = (TextView) findViewById(R.id.tvFriendUsername);
+        tvFriendSnapchat = (TextView) findViewById(R.id.tvFriendSnapchat);
+        tvFriendPhoneNumber = (TextView) findViewById(R.id.tvFriendPhoneNumber);
 
         Bundle friendIdBundle = getIntent().getExtras();
         if (friendIdBundle != null) {
@@ -36,7 +40,13 @@ public class FriendPageActivity extends AppCompatActivity {
             @Override
             public void handleResponse(Users response) {
                 tvFriendUsername.setText(response.getUserName());
-                tvFriendEmail.setText(response.getEmail());
+                tvFriendEmail.setText("Email: " + response.getEmail());
+                if(response.getSnapchat()!=null){
+                    tvFriendSnapchat.setText("Snapchat: " + response.getSnapchat());
+                }
+                if(response.getPhone_Number()!=null){
+                    tvFriendPhoneNumber.setText("Phone Number: " + response.getPhone_Number());
+                }
 
             }
 

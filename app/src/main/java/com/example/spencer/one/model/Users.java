@@ -10,6 +10,24 @@ public class Users extends BackendlessUser {
     private String email;
     private String userName;
     private String objectId;
+    private String Snapchat;
+    private String Phone_Number;
+
+    public String getSnapchat() {
+        return  Snapchat;
+    }
+
+    public void setSnapchat(String snapchat) {
+        this. Snapchat = snapchat;
+    }
+
+    public String getPhone_Number() {
+        return Phone_Number;
+    }
+
+    public void setPhone_Number(String phone_Number) {
+        this.Phone_Number = phone_Number;
+    }
 
     public Users() {
     }
