@@ -28,7 +28,8 @@
                 android:id="@+id/btnAddFriend"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColor="@color/cpb_blue_dark" />
+                android:textColor="@color/cpb_blue_dark"
+                android:background="@drawable/connect"/>
 
             <TextView
                 android:layout_width="wrap_content"
