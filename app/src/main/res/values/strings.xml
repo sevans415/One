@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">One</string>
     <string name="no_friend_dialogue">You don\'t have any friends yet! Click the Button above to connect</string>
+    <string name="save">Save</string>
+    <string name="enter_phone_number">Enter Phone Number</string>
+    <string name="enter_email_address">Enter Email Address</string>
+    <string name="enter_snapchat">Enter Snapchat</string>
 </resources>
