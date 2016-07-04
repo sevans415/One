@@ -24,7 +24,8 @@
             android:theme="@style/Theme.AppCompat.DayNight" />
         <activity android:name=".MainActivity" />
         <activity android:name=".FriendPageActivity" />
-        <activity android:name=".AddFriendActivity"></activity>
+        <activity android:name=".AddFriendActivity" />
+        <activity android:name=".ProfileActivity"></activity>
     </application>
 
 </manifest>
