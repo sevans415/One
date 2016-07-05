@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -32,27 +34,51 @@ public class AddFriendActivity extends AppCompatActivity {
     public static final String CURRENT_USER_ID = "currentUserId";
     public static final String OBJECT_ID = "objectId";
 
+    private EditText etFriendInput;
+    private Spinner querySpinner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friend);
 
-        Spinner querySpinner = (Spinner) findViewById(R.id.querySpinner);
+        etFriendInput = (EditText) findViewById(R.id.etFriendQueryInput);
+
+        querySpinner = (Spinner) findViewById(R.id.querySpinner);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.query_options_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        querySpinner.setAdapter(adapter);
+        String chosenQuery = querySpinner.getSelectedItem().toString();
+
+        querySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                etFriendInput.setHint("Type your friends "+parent.getItemAtPosition(position).toString()+" here");
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
         Button btnSaveFriend = (Button) findViewById(R.id.btnSaveFriend);
         btnSaveFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveFriend();
+                String selectedQuery = querySpinner.getSelectedItem().toString();
+                Toast.makeText(AddFriendActivity.this, selectedQuery, Toast.LENGTH_SHORT).show();
+                //saveFriend();
             }
         });
 
     }
 
-
     private void saveFriend() {
-        EditText etFriendsUserName = (EditText) findViewById(R.id.etFriendsUsername);
-        final String friendsUserName = etFriendsUserName.getText().toString();
+        final String friendsUserName = etFriendInput.getText().toString();
 
         String whereClause = "userName = '"+friendsUserName+"'";
         BackendlessDataQuery findFriendQuery = new BackendlessDataQuery();
