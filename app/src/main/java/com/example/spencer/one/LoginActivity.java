@@ -7,6 +7,7 @@ import android.util.Log;
 
 import android.content.Intent;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,6 +18,11 @@ import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.dd.CircularProgressButton;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -34,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
     @InjectView(R.id.input_password) EditText passwordText;
     @InjectView(R.id.btn_login) CircularProgressButton loginButton;
     @InjectView(R.id.link_signup) TextView signupLink;
+    private Button fbLoginBtn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

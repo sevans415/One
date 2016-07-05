@@ -1,7 +1,10 @@
 package com.example.spencer.one;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,6 +14,7 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.example.spencer.one.model.Users;
 
 import butterknife.InjectView;
 
@@ -38,8 +42,9 @@ public class ProfileActivity extends AppCompatActivity {
         etSnapchat = (EditText) findViewById(R.id.etSnapchat);
         emailBtn = (Button) findViewById(R.id.emailBtn);
         etEmail = (EditText) findViewById(R.id.etEmail);
-
         currentUser = Backendless.UserService.CurrentUser();
+
+        //setHints();
 
         phoneNumberBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,6 +112,62 @@ public class ProfileActivity extends AppCompatActivity {
                 Toast.makeText(ProfileActivity.this, ERROR, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void setHints(){
+        Backendless.Persistence.of(Users.class).findById(currentUser.getUserId(), new AsyncCallback<Users>() {
+            @Override
+            public void handleResponse(Users response) {
+                Users cu = response;
+                etEmail.setHint(cu.getEmail());
+                if(cu.getSnapchat()!=null){
+                    etSnapchat.setHint(cu.getSnapchat());
+                }
+                else{
+                    etSnapchat.setHint("Enter Snapchat");
+                }
+                if(cu.getPhone_Number()!=null){
+                    etPhoneNumber.setHint(cu.getPhone_Number());
+                }else{
+                    etPhoneNumber.setHint("Enter Phone Number");
+                }
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_logout,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.logoutBtn:
+                Backendless.UserService.logout(new AsyncCallback<Void>() {
+                    @Override
+                    public void handleResponse(Void response) {
+                        startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
+                        finish();
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault fault) {
+                        Toast.makeText(ProfileActivity.this, "Error Logging out", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                break;
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 

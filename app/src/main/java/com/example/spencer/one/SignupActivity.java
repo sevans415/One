@@ -83,6 +83,7 @@ public class SignupActivity extends AppCompatActivity {
         newUser.setEmail(email);
         newUser.setProperty("userName",userName);
         newUser.setPassword(password);
+        newUser.setProperty("name", userName);
 
 
         Backendless.UserService.register(newUser, new AsyncCallback<BackendlessUser>() {
