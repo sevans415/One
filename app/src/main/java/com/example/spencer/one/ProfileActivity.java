@@ -44,7 +44,7 @@ public class ProfileActivity extends AppCompatActivity {
         etEmail = (EditText) findViewById(R.id.etEmail);
         currentUser = Backendless.UserService.CurrentUser();
 
-        //setHints();
+        setHints();
 
         phoneNumberBtn.setOnClickListener(new View.OnClickListener() {
             @Override
