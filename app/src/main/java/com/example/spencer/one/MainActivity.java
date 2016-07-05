@@ -63,18 +63,58 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == ADD_FRIEND_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
 
+
                 if (friendIDList.isEmpty())
                     initFriendsListView();
                 else {
-                    Friends newFriend = new Friends();
+                    final Friends newFriend = new Friends();
                     newFriend.setActualName(data.getExtras().get(AddFriendActivity.FRIEND_NAME).toString());
                     newFriend.setUserName(data.getExtras().get(AddFriendActivity.FRIEND_USER_NAME).toString());
                     newFriend.setFriendId(data.getExtras().get(AddFriendActivity.FRIEND_USER_ID).toString());
                     newFriend.setCurrentUserId(data.getExtras().get(AddFriendActivity.CURRENT_USER_ID).toString());
-                    friendsAdapter.addItem(newFriend);
+                    newFriend.setObjectId(data.getExtras().get(AddFriendActivity.OBJECT_ID).toString());
+
+                    boolean notDuplicateFriend = deleteDuplicateFriends(newFriend);
+                    if (notDuplicateFriend)
+                        friendsAdapter.addItem(newFriend);
                 }
             }
         }
+    }
+
+    private boolean deleteDuplicateFriends(final Friends newFriend) {
+        boolean notDuplicateFriend = true;
+        friendIDList = friendsAdapter.getFriendsList();
+        for (final Friends friend : friendIDList) {
+            Log.d("TAG", "friend: "+friend.getFriendId()+" newFriend: "+newFriend.getFriendId());
+            if (friend.getFriendId().equals(newFriend.getFriendId())) {
+                notDuplicateFriend = false;
+
+                Backendless.Persistence.of(Friends.class).findById(newFriend.getObjectId(), new AsyncCallback<Friends>() {
+                    @Override
+                    public void handleResponse(Friends response) {
+                        Backendless.Persistence.of(Friends.class).remove(response, new AsyncCallback<Long>() {
+                            @Override
+                            public void handleResponse(Long response) {
+                                Toast.makeText(MainActivity.this, "Removed duplicate friend: "+ newFriend.getUserName(), Toast.LENGTH_SHORT).show();
+                                Log.d("TAG","removed "+newFriend.getUserName()+"as friend of "+friend.getUserName());
+                            }
+                            @Override
+                            public void handleFault(BackendlessFault fault) {
+                                Toast.makeText(MainActivity.this, "Error contacting server", Toast.LENGTH_SHORT).show();
+                                Log.d("TAG", "error: "+fault.getMessage());
+                            }
+                        });
+                    }
+                    @Override
+                    public void handleFault(BackendlessFault fault) {
+                        Toast.makeText(MainActivity.this, "Error contacting server", Toast.LENGTH_SHORT).show();
+                        Log.d("TAG", "error: "+fault.getMessage());
+                    }
+                });
+            }
+        }
+        return notDuplicateFriend;
     }
 
     private void initFriendsListView() {

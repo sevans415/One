@@ -19,6 +19,7 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.example.spencer.one.model.Friends;
 import com.example.spencer.one.model.Users;
+import com.example.spencer.one.recyclerViewItems.FriendsAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +30,7 @@ public class AddFriendActivity extends AppCompatActivity {
     public static final String FRIEND_USER_NAME = "friendUserName";
     public static final String FRIEND_USER_ID = "friendUserId";
     public static final String CURRENT_USER_ID = "currentUserId";
+    public static final String OBJECT_ID = "objectId";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +84,7 @@ public class AddFriendActivity extends AppCompatActivity {
                             result.putExtra(FRIEND_USER_NAME, friendToAdd.getUserName());
                             result.putExtra(FRIEND_USER_ID, friendToAdd.getFriendId());
                             result.putExtra(CURRENT_USER_ID, friendToAdd.getCurrentUserId());
+                            result.putExtra(OBJECT_ID, response.getObjectId());
                             setResult(Activity.RESULT_OK, result);
                             Toast.makeText(AddFriendActivity.this, friendName + " added as a friend", Toast.LENGTH_SHORT).show();
                             finish();

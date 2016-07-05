@@ -27,6 +27,10 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendViewHolder> {
         friendsList = friendsIDList;
     }
 
+    public ArrayList<Friends> getFriendsList() {
+        return friendsList;
+    }
+
     @Override
     public FriendViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View rowView = LayoutInflater.from(parent.getContext()).
@@ -56,6 +60,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendViewHolder> {
         for (Friends friend : friendsList) {
             Log.d("TAG", "friend: "+friend.getFriendId()+" newFriend: "+newFriend.getFriendId());
             if (friend.getFriendId().equals(newFriend.getFriendId())) {
+
                 notDuplicateFriend = false;
             }
         }
