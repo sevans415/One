@@ -1,16 +1,23 @@
 package com.example.spencer.one;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
+import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.backendless.persistence.BackendlessDataQuery;
+import com.example.spencer.one.model.Friends;
 import com.example.spencer.one.model.Users;
 
 import java.util.ArrayList;
@@ -18,12 +25,17 @@ import java.util.Arrays;
 
 public class AddFriendActivity extends AppCompatActivity {
 
-    private Users friendObject;
+    public static final String FRIEND_NAME = "friendName";
+    public static final String FRIEND_USER_NAME = "friendUserName";
+    public static final String FRIEND_USER_ID = "friendUserId";
+    public static final String CURRENT_USER_ID = "currentUserId";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friend);
+
+        Spinner querySpinner = (Spinner) findViewById(R.id.querySpinner);
 
         Button btnSaveFriend = (Button) findViewById(R.id.btnSaveFriend);
         btnSaveFriend.setOnClickListener(new View.OnClickListener() {
@@ -33,95 +45,66 @@ public class AddFriendActivity extends AppCompatActivity {
             }
         });
 
-
-
     }
+
 
     private void saveFriend() {
-        Backendless.Persistence.of(Users.class).findById("4AABBA2D-A844-E6D9-FFA4-769ED828F600", new AsyncCallback<Users>() {
+        EditText etFriendsUserName = (EditText) findViewById(R.id.etFriendsUsername);
+        final String friendsUserName = etFriendsUserName.getText().toString();
+
+        String whereClause = "userName = '"+friendsUserName+"'";
+        BackendlessDataQuery findFriendQuery = new BackendlessDataQuery();
+        findFriendQuery.setWhereClause(whereClause);
+        Backendless.Persistence.of(Users.class).find(findFriendQuery, new AsyncCallback<BackendlessCollection<Users>>() {
             @Override
-            public void handleResponse(Users response) {
-                friendObject = response;
-                Log.d("TAG", "response username: "+response.getUserName());
-                Log.d("TAG", "Friend object email: "+friendObject.getEmail());
-                Log.d("TAG", "FRIEND TO ADD: "+friendObject.toString());
-
-                BackendlessUser currentUser = Backendless.UserService.CurrentUser();
-                BackendlessUser[] friends = (BackendlessUser[]) currentUser.getProperty("Friends");
-                //Log.d("TAG", "original friend list: "+friends.toString());
-
-                for (BackendlessUser friend : friends) {
-                    Log.d("TAG", "original friend: "+friend.toString());
+            public void handleResponse(BackendlessCollection<Users> response) {
+                if (response.getData().isEmpty()) {
+                    Toast.makeText(AddFriendActivity.this, "We could not find the user '"+
+                            friendsUserName+"' in our database", Toast.LENGTH_SHORT).show();
                 }
+                else if (response.getData().get(0).getObjectId().equals(Backendless.UserService.CurrentUser().getUserId())) {
+                    Toast.makeText(AddFriendActivity.this, "You can't add yourself as a friend, ya dumby", Toast.LENGTH_SHORT).show();
+                } else {
+                    final Friends friendToAdd = new Friends();
+                    friendToAdd.setCurrentUserId(Backendless.UserService.CurrentUser().getUserId());
+                    friendToAdd.setFriendId(response.getData().get(0).getObjectId());
+                    friendToAdd.setActualName(response.getData().get(0).getName());
+                    friendToAdd.setUserName(response.getData().get(0).getUserName());
+                    Backendless.Persistence.of(Friends.class).save(friendToAdd, new AsyncCallback<Friends>() {
+                        @Override
+                        public void handleResponse(Friends response) {
+                            String friendName;
+                            if (friendToAdd.getActualName() != null)
+                                friendName = friendToAdd.getActualName();
+                            else friendName = friendToAdd.getUserName();
+                            Intent result = new Intent();
+                            result.putExtra(FRIEND_NAME,friendToAdd.getActualName());
+                            result.putExtra(FRIEND_USER_NAME, friendToAdd.getUserName());
+                            result.putExtra(FRIEND_USER_ID, friendToAdd.getFriendId());
+                            result.putExtra(CURRENT_USER_ID, friendToAdd.getCurrentUserId());
+                            setResult(Activity.RESULT_OK, result);
+                            Toast.makeText(AddFriendActivity.this, friendName + " added as a friend", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
 
-                BackendlessUser[] newFriendList = new BackendlessUser[friends.length+1];
-                System.arraycopy(friends,0,newFriendList,1,friends.length);
-                newFriendList[0] = friendObject;
-
-                for (BackendlessUser friend : newFriendList) {
-                    Log.d("TAG", "new friend: "+friend.toString());
+                        @Override
+                        public void handleFault(BackendlessFault fault) {
+                            Toast.makeText(AddFriendActivity.this, "Error saving friend: "+
+                                    fault.getMessage(), Toast.LENGTH_SHORT).show();
+                            Log.d("TAG", "SAVing friend error: " + fault.getMessage());
+                            finish();
+                        }
+                    });
                 }
-
-                //Log.d("TAG", "new friend list: "+newFriendList.toString());
-                currentUser.setProperty("Friends", newFriendList);
-                //Backendless.UserService.update(currentUser).setProperty("Friends", newFriendList);
-                Backendless.UserService.update(currentUser, new AsyncCallback<BackendlessUser>() {
-                    @Override
-                    public void handleResponse(BackendlessUser response) {
-                        Log.d("TAG","async came back: "+response.toString());
-                        finish();
-                    }
-
-                    @Override
-                    public void handleFault(BackendlessFault fault) {
-                        Toast.makeText(AddFriendActivity.this, "Error: "+fault.getMessage(), Toast.LENGTH_SHORT).show();
-                        Log.d("TAG", "updating users friends error: "+fault.getMessage());
-                    }
-                });
             }
 
             @Override
             public void handleFault(BackendlessFault fault) {
-                Toast.makeText(AddFriendActivity.this, "Error: "+fault.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.d("TAG", "getting friend list error: "+fault.getMessage());
-            }
-        });
-        /*
-        //
-        Log.d("TAG", "FRIEND TO ADD: "+friendObject.getEmail());
-        BackendlessUser currentUser = Backendless.UserService.CurrentUser();
-        BackendlessUser[] friends = (BackendlessUser[]) currentUser.getProperty("Friends");
-        //Log.d("TAG", "original friend list: "+friends.toString());
-
-        for (BackendlessUser friend : friends) {
-            Log.d("TAG", "original friend: "+friend.toString());
-        }
-
-        BackendlessUser[] newFriendList = new BackendlessUser[friends.length+1];
-        System.arraycopy(friends,0,newFriendList,1,friends.length);
-        newFriendList[0] = friendObject;
-
-        for (BackendlessUser friend : newFriendList) {
-            //Log.d("TAG", "new friend: "+friend.toString());
-        }
-
-        //Log.d("TAG", "new friend list: "+newFriendList.toString());
-        currentUser.setProperty("Friends", friends);
-        Backendless.UserService.update(currentUser, new AsyncCallback<BackendlessUser>() {
-            @Override
-            public void handleResponse(BackendlessUser response) {
-                Log.d("TAG","async came back: "+response.toString());
+                Toast.makeText(AddFriendActivity.this, "Error finding user: "+fault.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.d("TAG","FINDing friend error: "+fault.getMessage());
                 finish();
-            }
 
-            @Override
-            public void handleFault(BackendlessFault fault) {
-                Toast.makeText(AddFriendActivity.this, "Error: "+fault.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.d("TAG", "updating users friends error: "+fault.getMessage());
             }
         });
-        */
-
     }
-
 }

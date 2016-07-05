@@ -45,55 +45,6 @@ public class MainActivity extends AppCompatActivity {
 
         initFriendsListView();
 
-
-        //BackendlessUser currentUser = Backendless.UserService.CurrentUser();
-        /*
-        String friendInfo = "";
-
-        for (BackendlessUser friend : friendList) {
-            friendInfo += "Username :"+friend.getProperty(USER_NAME).toString()+"\n" +
-                    "Email: "+friend.getEmail()+"\n\n";
-        }
-
-        if (friendInfo.equals(""))
-            tvUsersFriends.setText("You have no friends");
-        else
-            tvUsersFriends.setText(friendInfo);
-*/
-        /*
-        StringBuilder whereClause = new StringBuilder();
-        whereClause.append( "Users[friends]" );
-        whereClause.append( ".objectId='" ).append( currentUser.getObjectId() ).append( "'" );
-        BackendlessDataQuery dataQuery = new BackendlessDataQuery();
-        dataQuery.setWhereClause( whereClause.toString() );
-        List<Users> result = Backendless.Persistence.of( Users.class ).find( dataQuery ).getCurrentPage();
-        */
-
-        // tvUsersFriends.setText(result.get(0).getUserName()+", "+result.get(0).getEmail());
-
-        /*
-        Object usersFriends = currentUser.getProperties().get("Friends");
-        String friendsName = usersFriends.getClass().getName();
-        tvUsersFriends.setText(friendsName);
-
-        Backendess.Persistence.of(Users.class).find(new AsyncCallback<BakendlessCollection<Users>>(){
-            @Override
-            public void handleResponse( BakendlessCollection<Users> foundUsers )
-            {
-                Log.d("TAG", "Proper response");
-                String user1 = foundUsers.getData().get(0).getEmail();
-                tvUsersFriends.setText(user1);
-                // all Contact instances have been found
-            }
-            @Override
-            public void handleFault( BackendlessFault fault )
-            {
-                Log.d("TAG", "error: "+fault.getMessage());
-                // an error has occurred, the error code can be retrieved with fault.getCode()
-          }
-        });
-       // */
-
     }
 
     private void addFriendOnButtonClick() {
@@ -111,7 +62,17 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ADD_FRIEND_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                initFriendsListView();
+
+                if (friendIDList.isEmpty())
+                    initFriendsListView();
+                else {
+                    Friends newFriend = new Friends();
+                    newFriend.setActualName(data.getExtras().get(AddFriendActivity.FRIEND_NAME).toString());
+                    newFriend.setUserName(data.getExtras().get(AddFriendActivity.FRIEND_USER_NAME).toString());
+                    newFriend.setFriendId(data.getExtras().get(AddFriendActivity.FRIEND_USER_ID).toString());
+                    newFriend.setCurrentUserId(data.getExtras().get(AddFriendActivity.CURRENT_USER_ID).toString());
+                    friendsAdapter.addItem(newFriend);
+                }
             }
         }
     }
@@ -126,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 friendIDList = new ArrayList<Friends>(response.getTotalObjects());
                 friendIDList.addAll(response.getCurrentPage());
 
-                if (friendIDList.isEmpty()) { // NEED TO UPDATE TO IF FRIENDIDLIST IS NULL
+                if (friendIDList.isEmpty()) {
                     TextView tvNoFrands = (TextView) findViewById(R.id.tvNoFrands);
                     tvNoFrands.setVisibility(View.VISIBLE);
                 } else {

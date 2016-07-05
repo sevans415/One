@@ -10,6 +10,7 @@ public class Users extends BackendlessUser {
     private String email;
     private String userName;
     private String objectId;
+    private String name;
     private String Snapchat;
     private String Phone_Number;
 
@@ -54,5 +55,13 @@ public class Users extends BackendlessUser {
 
     public void setObjectId(String objectId) {
         this.objectId = objectId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
