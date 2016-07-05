@@ -5,4 +5,10 @@
     <string name="enter_phone_number">Enter Phone Number</string>
     <string name="enter_email_address">Enter Email Address</string>
     <string name="enter_snapchat">Enter Snapchat</string>
+    
+    <string-array name="query_options_array">
+        <item>userName</item>
+        <item>email</item>
+        <item>name</item>
+    </string-array>
 </resources>

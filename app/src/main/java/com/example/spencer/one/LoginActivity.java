@@ -16,6 +16,7 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.backendless.persistence.local.UserTokenStorageFactory;
 import com.dd.CircularProgressButton;
 
 import butterknife.ButterKnife;
@@ -41,6 +42,24 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.inject(this);
 
+        String userToken = UserTokenStorageFactory.instance().getStorage().get();
+        if( userToken != null && !userToken.equals( "" ) ) {
+            Log.d("TAG", "userToken: "+userToken);
+
+            String currentUserObjectId = Backendless.UserService.loggedInUser();
+            Backendless.UserService.findById(currentUserObjectId, new AsyncCallback<BackendlessUser>() {
+                @Override
+                public void handleResponse(BackendlessUser response) {
+                    Backendless.UserService.setCurrentUser(response);
+                    onLoginSuccess();
+                }
+
+                @Override
+                public void handleFault(BackendlessFault fault) {
+                }
+            });
+        }
+
         loginButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -59,6 +78,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
 
     public void login() {
         Log.d(TAG, "Login");
@@ -103,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
             public void handleFault(BackendlessFault fault) {
                 onLoginFailed();
             }
-        });
+        }, true);
 
     }
 

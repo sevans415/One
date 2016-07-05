@@ -1,9 +1,11 @@
 package com.example.spencer.one.recyclerViewItems;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.backendless.BackendlessUser;
 import com.example.spencer.one.MainActivity;
@@ -48,4 +50,20 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendViewHolder> {
     public int getItemCount() {
         return friendsList.size();
     }
+
+    public void addItem(Friends newFriend) {
+        boolean notDuplicateFriend = true;
+        for (Friends friend : friendsList) {
+            Log.d("TAG", "friend: "+friend.getFriendId()+" newFriend: "+newFriend.getFriendId());
+            if (friend.getFriendId().equals(newFriend.getFriendId())) {
+                notDuplicateFriend = false;
+            }
+        }
+        if (notDuplicateFriend) {
+            friendsList.add(newFriend);
+            notifyDataSetChanged();
+        }
+    }
 }
+
+

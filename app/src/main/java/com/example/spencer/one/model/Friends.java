@@ -13,6 +13,7 @@ public class Friends {
     private String friendId;
     private String userName;
     private String actualName;
+    private String objectId;
 
     public Friends() {
     }
@@ -47,5 +48,13 @@ public class Friends {
 
     public void setActualName(String actualName) {
         this.actualName = actualName;
+    }
+
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
     }
 }

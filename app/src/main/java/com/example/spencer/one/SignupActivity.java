@@ -78,17 +78,18 @@ public class SignupActivity extends AppCompatActivity {
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
 
-        // TODO: Implement your own signup logic here.
         BackendlessUser newUser = new BackendlessUser();
         newUser.setEmail(email);
         newUser.setProperty("userName",userName);
         newUser.setPassword(password);
+        newUser.setProperty("name", userName);
 
 
         Backendless.UserService.register(newUser, new AsyncCallback<BackendlessUser>() {
             @Override
             public void handleResponse(BackendlessUser response) {
                 isRegistered = true;
+                Backendless.UserService.setCurrentUser(response);
                 //onSignupSuccess();
             }
 
@@ -123,7 +124,6 @@ public class SignupActivity extends AppCompatActivity {
         Toast.makeText(SignupActivity.this,"You are registered!", Toast.LENGTH_SHORT).show();
         signupButton.setEnabled(true);
         setResult(RESULT_OK, null);
-        startActivity(new Intent (this, LoginActivity.class));
         finish();
     }
 
