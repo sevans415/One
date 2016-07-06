@@ -6,6 +6,7 @@
     <string name="enter_email_address">Enter Email Address</string>
     <string name="enter_snapchat">Enter Snapchat</string>
 
+    <string name="facebook_app_id">1240272409358328</string>
     <string-array name="query_options_array">
         <item>username</item>
         <item>email</item>
