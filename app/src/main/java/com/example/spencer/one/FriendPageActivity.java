@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.bumptech.glide.Glide;
 import com.example.spencer.one.recyclerViewItems.FriendViewHolder;
 import com.example.spencer.one.model.Users;
 
@@ -36,6 +38,7 @@ public class FriendPageActivity extends AppCompatActivity {
     private Button btnPhoneNumber;
     private Button btnEmail;
     private Button fbBtn;
+    private String fbid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +70,11 @@ public class FriendPageActivity extends AppCompatActivity {
         });
 
 
+        ImageView ivFbPhoto = (ImageView) findViewById(R.id.ivFbPhoto);
+        String url = "http://graph.facebook.com/"+fbid+"/picture?type=large";
+        Glide.with(FriendPageActivity.this).load(url).into(ivFbPhoto);
+
+
 
         Bundle friendIdBundle = getIntent().getExtras();
         if (friendIdBundle != null) {
@@ -78,6 +86,7 @@ public class FriendPageActivity extends AppCompatActivity {
                 goToFb();
             }
         });
+
         getFriendInfo();
     }
 
@@ -106,6 +115,7 @@ public class FriendPageActivity extends AppCompatActivity {
                 friendEmail = response.getEmail();
                 friendName = response.getName();
                 friendPhoneNumber = response.getPhone_Number();
+                fbid = response.getFbid();
 
                 tvFriendUsername.setText(response.getUserName());
                 tvFriendEmail.setText(response.getEmail());

@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
                     newFriend.setFriendId(data.getExtras().get(AddFriendActivity.FRIEND_USER_ID).toString());
                     newFriend.setCurrentUserId(data.getExtras().get(AddFriendActivity.CURRENT_USER_ID).toString());
                     newFriend.setObjectId(data.getExtras().get(AddFriendActivity.OBJECT_ID).toString());
+                    newFriend.setFbid(data.getExtras().getString(AddFriendActivity.FBID));
 
                     boolean notDuplicateFriend = deleteDuplicateFriends(newFriend);
                     if (notDuplicateFriend)
@@ -136,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
                     final GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this, 2);
                     friendsRecyclerView.setLayoutManager(layoutManager);
 
-                    friendsAdapter = new FriendsAdapter(friendIDList);
+                    friendsAdapter = new FriendsAdapter(friendIDList, MainActivity.this);
                     friendsRecyclerView.setAdapter(friendsAdapter);
                 }
 

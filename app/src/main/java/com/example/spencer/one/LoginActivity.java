@@ -99,8 +99,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void fbLogin(){
         Map<String, String> facebookFieldMappings = new HashMap<String, String>();
-        facebookFieldMappings.put( "email", "userName" );
-        facebookFieldMappings.put("name", "name");
+        facebookFieldMappings.put( "name", "userName" );
         facebookFieldMappings.put("id", "fbid");
 
         List<String> permissions = new ArrayList<String>();

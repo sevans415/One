@@ -14,6 +14,7 @@ public class Friends {
     private String userName;
     private String actualName;
     private String objectId;
+    private String fbid;
 
     public Friends() {
     }
@@ -56,5 +57,13 @@ public class Friends {
 
     public void setObjectId(String objectId) {
         this.objectId = objectId;
+    }
+
+    public String getFbid() {
+        return fbid;
+    }
+
+    public void setFbid(String fbid) {
+        this.fbid = fbid;
     }
 }

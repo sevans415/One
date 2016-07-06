@@ -35,6 +35,7 @@ public class AddFriendActivity extends AppCompatActivity {
     public static final String FRIEND_USER_ID = "friendUserId";
     public static final String CURRENT_USER_ID = "currentUserId";
     public static final String OBJECT_ID = "objectId";
+    public static final String FBID = "fbid";
 
     private EditText etFriendInput;
     private Spinner querySpinner;
@@ -110,6 +111,8 @@ public class AddFriendActivity extends AppCompatActivity {
                     friendToAdd.setFriendId(response.getData().get(0).getObjectId());
                     friendToAdd.setActualName(response.getData().get(0).getName());
                     friendToAdd.setUserName(response.getData().get(0).getUserName());
+                    friendToAdd.setFbid(response.getData().get(0).getFbid());
+                    Log.d("TAG","Adding fbid: "+response.getData().get(0).getFbid());
 
                     Backendless.Persistence.of(Friends.class).save(friendToAdd, new AsyncCallback<Friends>() {
                         @Override
@@ -124,6 +127,8 @@ public class AddFriendActivity extends AppCompatActivity {
                             result.putExtra(FRIEND_USER_ID, friendToAdd.getFriendId());
                             result.putExtra(CURRENT_USER_ID, friendToAdd.getCurrentUserId());
                             result.putExtra(OBJECT_ID, response.getObjectId());
+                            result.putExtra(FBID,friendToAdd.getFbid());
+                            Log.d("TAG", "ADDING FRIEND: "+response.getFbid());
                             setResult(Activity.RESULT_OK, result);
                             Toast.makeText(AddFriendActivity.this, friendName + " added as a friend", Toast.LENGTH_SHORT).show();
                             finish();
