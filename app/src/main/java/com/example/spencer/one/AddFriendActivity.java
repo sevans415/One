@@ -110,6 +110,7 @@ public class AddFriendActivity extends AppCompatActivity {
                     friendToAdd.setFriendId(response.getData().get(0).getObjectId());
                     friendToAdd.setActualName(response.getData().get(0).getName());
                     friendToAdd.setUserName(response.getData().get(0).getUserName());
+
                     Backendless.Persistence.of(Friends.class).save(friendToAdd, new AsyncCallback<Friends>() {
                         @Override
                         public void handleResponse(Friends response) {

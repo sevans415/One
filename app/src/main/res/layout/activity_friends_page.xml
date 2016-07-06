@@ -37,4 +37,16 @@
         android:layout_height="wrap_content"
         android:textSize="22dp"/>
 
+    <Button
+        android:id="@+id/btnAddContact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add to contacts"/>
+
+    <Button
+        android:id="@+id/btnMessages"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Messages"/>
+
 </LinearLayout>

@@ -1,0 +1,131 @@
+package com.example.spencer.one;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.backendless.Backendless;
+import com.backendless.BackendlessCollection;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
+import com.backendless.persistence.BackendlessDataQuery;
+import com.example.spencer.one.model.Messages;
+
+public class MessagesActivity extends AppCompatActivity {
+
+    private EditText etMessage;
+    private TextView tvConvo;
+    private Messages messageObject;
+    private String friendID;
+    private String friendUsername;
+    private String concatIdOne;
+    private String concatIdTwo;
+    private String currentUserName;
+    private String convo;
+    private String objectId;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_messages);
+
+        etMessage = (EditText) findViewById(R.id.etMessage);
+        tvConvo = (TextView) findViewById(R.id.tvConvo);
+
+        friendID = getIntent().getExtras().get(FriendPageActivity.FRIEND_ID).toString();
+        friendUsername = getIntent().getExtras().get(FriendPageActivity.FRIEND_USERNAME).toString();
+        currentUserName = Backendless.UserService.CurrentUser().getProperty("userName").toString();
+        concatIdOne = friendID + Backendless.UserService.CurrentUser().getObjectId();
+        concatIdTwo = Backendless.UserService.CurrentUser().getObjectId() + friendID;
+
+
+        Button btnRefresh = (Button) findViewById(R.id.btnRefresh);
+        btnRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refresh();
+            }
+
+
+        });
+
+        Button btnSend = (Button) findViewById(R.id.btnSendMessage);
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                send();
+            }
+        });
+
+        refresh();
+    }
+
+
+    private void refresh() {
+        BackendlessDataQuery convoQuery = new BackendlessDataQuery();
+        convoQuery.setWhereClause("usersConcatIds = '" + concatIdOne + "' or usersConcatIds = '" + concatIdTwo + "'");
+        Backendless.Persistence.of(Messages.class).find(convoQuery, new AsyncCallback<BackendlessCollection<Messages>>() {
+            @Override
+            public void handleResponse(BackendlessCollection<Messages> response) {
+                if (response.getTotalObjects() == 0) {
+                    makeNewConvo();
+                } else {
+                    messageObject = response.getData().get(0);
+                    convo = response.getData().get(0).getConvo();
+                    tvConvo.setText(convo);
+                    Toast.makeText(MessagesActivity.this, "Messages loaded", Toast.LENGTH_SHORT).show();
+                    Log.d("TAG", "messages: "+convo);
+                }
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+
+            }
+        });
+    }
+
+    private void makeNewConvo() {
+        Messages newConvo = new Messages(concatIdOne, friendUsername, currentUserName);
+        Backendless.Persistence.of(Messages.class).save(newConvo, new AsyncCallback<Messages>() {
+            @Override
+            public void handleResponse(Messages response) {
+                messageObject = response;
+                Toast.makeText(MessagesActivity.this, "Conversation created", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                Toast.makeText(MessagesActivity.this, "Error creating convo: " + fault.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.d("TAG", fault.getMessage());
+                Log.d("TAG", concatIdOne);
+            }
+        });
+    }
+
+
+    private void send() {
+        String newMessage = etMessage.getText().toString();
+        messageObject.setConvo(convo+"<"+currentUserName+"> "+newMessage+"\n");
+        Backendless.Persistence.save(messageObject, new AsyncCallback<Messages>() {
+            @Override
+            public void handleResponse(Messages response) {
+                Toast.makeText(MessagesActivity.this, "Message sent", Toast.LENGTH_SHORT).show();
+                refresh();
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                Toast.makeText(MessagesActivity.this, "error sending message: "+fault.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.d("TAG","sending message error: "+fault.getMessage());
+            }
+        });
+
+        Toast.makeText(MessagesActivity.this, "sent", Toast.LENGTH_SHORT).show();
+    }
+}
