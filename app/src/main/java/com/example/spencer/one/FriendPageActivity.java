@@ -32,6 +32,7 @@ public class FriendPageActivity extends AppCompatActivity {
     private TextView tvFriendPhoneNumber;
     private Button btnPhoneNumber;
     private Button btnEmail;
+    private Button fbBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +45,18 @@ public class FriendPageActivity extends AppCompatActivity {
         tvFriendPhoneNumber = (TextView) findViewById(R.id.tvFriendPhoneNumber);
         btnPhoneNumber = (Button) findViewById(R.id.callClick);
         btnEmail = (Button) findViewById(R.id.emailClick);
+        fbBtn = (Button) findViewById(R.id.goToFb);
 
         Bundle friendIdBundle = getIntent().getExtras();
         if (friendIdBundle != null) {
             friendID = friendIdBundle.getString(FriendViewHolder.FRIEND_ID);
         }
+       fbBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToFb();
+            }
+        });
 
         Backendless.Persistence.of(Users.class).findById(friendID, new AsyncCallback<Users>() {
             @Override
@@ -102,5 +110,27 @@ public class FriendPageActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    public void goToFb(){
+        Backendless.Persistence.of(Users.class).findById(friendID, new AsyncCallback<Users>() {
+            @Override
+            public void handleResponse(Users response) {
+                if(response.getFbid()!=null){
+                    String url = "https://www.facebook.com/"+ response.getFbid();
+                    Uri uriUrl = Uri.parse(url);
+                    Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+                    startActivity(launchBrowser);
+                }else {
+                    Toast.makeText(FriendPageActivity.this, "User has no Facebook connected"
+                            , Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+
+            }
+        });
     }
 }

@@ -101,9 +101,11 @@ public class LoginActivity extends AppCompatActivity {
         Map<String, String> facebookFieldMappings = new HashMap<String, String>();
         facebookFieldMappings.put( "email", "userName" );
         facebookFieldMappings.put("name", "name");
+        facebookFieldMappings.put("id", "fbid");
 
         List<String> permissions = new ArrayList<String>();
         permissions.add( "email" );
+        //permissions.add("picture");
         Backendless.UserService.loginWithFacebookSdk( LoginActivity.this,facebookFieldMappings, permissions,
                 callbackManager,
                 new AsyncCallback<BackendlessUser>()

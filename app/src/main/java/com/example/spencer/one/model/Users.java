@@ -13,6 +13,15 @@ public class Users extends BackendlessUser {
     private String name;
     private String Snapchat;
     private String Phone_Number;
+    private String fbid;
+
+    public String getFbid() {
+        return fbid;
+    }
+
+    public void setFbid(String fbid) {
+        this.fbid = fbid;
+    }
 
     public String getSnapchat() {
         return  Snapchat;

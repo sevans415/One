@@ -85,5 +85,11 @@
             android:textSize="18dp"
             android:clickable="true"/>
     </LinearLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/goToFb"
+        android:text="Go to User's Facebook Page"/>
 
 </LinearLayout>
