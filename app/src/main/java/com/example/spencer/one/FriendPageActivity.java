@@ -1,7 +1,11 @@
 package com.example.spencer.one;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.provider.ContactsContract;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
+import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.example.spencer.one.recyclerViewItems.FriendViewHolder;
@@ -20,12 +25,12 @@ public class FriendPageActivity extends AppCompatActivity {
 
     public static final String FRIEND_ID = "friendID";
     public static final String FRIEND_USERNAME = "friend username";
-    private String friendEmail = "";
     private String friendName = "";
     private String friendPhoneNumber = "";
-    private String friendID;
     private TextView tvFriendEmail;
+    private String friendEmail;
     private TextView tvFriendUsername;
+    private String friendID;
     private TextView tvFriendSnapchat;
     private TextView tvFriendPhoneNumber;
     private Button btnPhoneNumber;
@@ -109,7 +114,7 @@ public class FriendPageActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         Intent emailintent = new Intent(android.content.Intent.ACTION_SEND);
                         emailintent.setType("plain/text");
-                        emailintent.putExtra(android.content.Intent.EXTRA_EMAIL,new String[] {response.getEmail()});
+                        emailintent.putExtra(android.content.Intent.EXTRA_EMAIL,new String[] {friendEmail});
                         emailintent.putExtra(android.content.Intent.EXTRA_SUBJECT, "");
                         emailintent.putExtra(android.content.Intent.EXTRA_TEXT,"");
                         startActivity(Intent.createChooser(emailintent, "Send mail..."));
@@ -126,7 +131,7 @@ public class FriendPageActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             Intent callIntent = new Intent(Intent.ACTION_CALL);
-                            callIntent.setData(Uri.parse("tel:" + response.getPhone_Number()));
+                            callIntent.setData(Uri.parse("tel:" + friendPhoneNumber));
                             if (ActivityCompat.checkSelfPermission(FriendPageActivity.this, Manifest.permission.CALL_PHONE)
                                     != PackageManager.PERMISSION_GRANTED) {
                                 // TODO: Consider calling
