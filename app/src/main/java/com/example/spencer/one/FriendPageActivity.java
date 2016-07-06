@@ -7,6 +7,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
+import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.example.spencer.one.recyclerViewItems.FriendViewHolder;
@@ -43,9 +44,13 @@ public class FriendPageActivity extends AppCompatActivity {
                 tvFriendEmail.setText("Email: " + response.getEmail());
                 if(response.getSnapchat()!=null){
                     tvFriendSnapchat.setText("Snapchat: " + response.getSnapchat());
+                }else {
+                    tvFriendSnapchat.setText("No snapchat listed");
                 }
                 if(response.getPhone_Number()!=null){
                     tvFriendPhoneNumber.setText("Phone Number: " + response.getPhone_Number());
+                }else{
+                    tvFriendPhoneNumber.setText("No phone number listed");
                 }
 
             }

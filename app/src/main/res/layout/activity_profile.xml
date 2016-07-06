@@ -30,7 +30,7 @@
             android:id="@+id/snapchatBtn"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/snapchat"/>
         <EditText
             android:id="@+id/etSnapchat"
@@ -48,7 +48,7 @@
         <Button
             android:id="@+id/emailBtn"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/mail"
             android:layout_weight="1"/>
         <EditText
@@ -68,7 +68,7 @@
             android:id="@+id/phoneNumberBtn"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/phone"/>
         <EditText
             android:id="@+id/etPhoneNumber"
