@@ -11,5 +11,6 @@
         <item>email</item>
         <item>name</item>
         <item>phone number</item>
+        <item>snapchat</item>
     </string-array>
 </resources>

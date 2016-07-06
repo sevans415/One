@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
+import com.bumptech.glide.Glide;
 import com.example.spencer.one.model.Friends;
 import com.example.spencer.one.model.Users;
 import com.example.spencer.one.recyclerViewItems.FriendsAdapter;
@@ -36,11 +38,18 @@ public class AddFriendActivity extends AppCompatActivity {
 
     private EditText etFriendInput;
     private Spinner querySpinner;
+    private ImageView ivQrCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friend);
+
+        ivQrCode = (ImageView) findViewById(R.id.ivQrCode);
+
+        String url = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=";
+        url += Backendless.UserService.CurrentUser().getObjectId();
+        Glide.with(AddFriendActivity.this).load(url).into(ivQrCode);
 
         etFriendInput = (EditText) findViewById(R.id.etFriendQueryInput);
 
@@ -70,17 +79,20 @@ public class AddFriendActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String selectedQuery = querySpinner.getSelectedItem().toString();
-                Toast.makeText(AddFriendActivity.this, selectedQuery, Toast.LENGTH_SHORT).show();
-                //saveFriend();
+                String queryType;
+                if (selectedQuery.matches("phone number"))
+                    queryType = "Phone_Number";
+                else queryType = selectedQuery;
+                saveFriend(queryType);
             }
         });
 
     }
 
-    private void saveFriend() {
-        final String friendsUserName = etFriendInput.getText().toString();
+    private void saveFriend(String queryType) {
+        final String friendsInfo = etFriendInput.getText().toString();
 
-        String whereClause = "userName = '"+friendsUserName+"'";
+        String whereClause = queryType+" = '"+friendsInfo+"'";
         BackendlessDataQuery findFriendQuery = new BackendlessDataQuery();
         findFriendQuery.setWhereClause(whereClause);
         Backendless.Persistence.of(Users.class).find(findFriendQuery, new AsyncCallback<BackendlessCollection<Users>>() {
@@ -88,7 +100,7 @@ public class AddFriendActivity extends AppCompatActivity {
             public void handleResponse(BackendlessCollection<Users> response) {
                 if (response.getData().isEmpty()) {
                     Toast.makeText(AddFriendActivity.this, "We could not find the user '"+
-                            friendsUserName+"' in our database", Toast.LENGTH_SHORT).show();
+                            friendsInfo+"' in our database", Toast.LENGTH_SHORT).show();
                 }
                 else if (response.getData().get(0).getObjectId().equals(Backendless.UserService.CurrentUser().getUserId())) {
                     Toast.makeText(AddFriendActivity.this, "You can't add yourself as a friend, ya dumby", Toast.LENGTH_SHORT).show();
