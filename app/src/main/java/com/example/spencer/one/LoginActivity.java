@@ -14,11 +14,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
+import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.local.UserTokenStorageFactory;
 import com.dd.CircularProgressButton;
+import com.example.spencer.one.model.Users;
+import com.facebook.CallbackManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,13 +45,15 @@ public class LoginActivity extends AppCompatActivity {
     @InjectView(R.id.btn_login) CircularProgressButton loginButton;
     @InjectView(R.id.link_signup) TextView signupLink;
     private Button fbLoginBtn;
+    private CallbackManager callbackManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.inject(this);
-
+        callbackManager = CallbackManager.Factory.create();
+        fbLoginBtn= (Button) findViewById(R.id.fbBtn);
         String userToken = UserTokenStorageFactory.instance().getStorage().get();
         if( userToken != null && !userToken.equals( "" ) ) {
             Log.d("TAG", "userToken: "+userToken);
@@ -74,6 +79,12 @@ public class LoginActivity extends AppCompatActivity {
                 login();
             }
         });
+        fbLoginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fbLogin();
+            }
+        });
 
         signupLink.setOnClickListener(new View.OnClickListener() {
 
@@ -85,6 +96,35 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void fbLogin(){
+        Map<String, String> facebookFieldMappings = new HashMap<String, String>();
+        facebookFieldMappings.put( "email", "userName" );
+        facebookFieldMappings.put("name", "name");
+
+        List<String> permissions = new ArrayList<String>();
+        permissions.add( "email" );
+        Backendless.UserService.loginWithFacebookSdk( LoginActivity.this,facebookFieldMappings, permissions,
+                callbackManager,
+                new AsyncCallback<BackendlessUser>()
+                {
+                    @Override
+                    public void handleResponse(final BackendlessUser loggedInUser )
+                    {
+                        //loggedInUser.setProperty("name", loggedInUser.getEmail());
+                        Log.d("TAG",loggedInUser.getProperty("name").toString());
+                        onLoginSuccess();
+                    }
+
+                    @Override
+                    public void handleFault( BackendlessFault fault )
+                    {
+                        // failed to log in
+                        Log.d("TAG", "Error:" + fault.getMessage());
+                    }
+                }, true );
+    }
+
 
 
     public void login() {
@@ -147,6 +187,7 @@ public class LoginActivity extends AppCompatActivity {
                 finish(); // finishes the process, eventually get rid of ^ line, leave
             }
         }
+        callbackManager.onActivityResult( requestCode, resultCode, data );
     }
 
     @Override

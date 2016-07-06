@@ -50,6 +50,16 @@
             android:inputType="textPassword" />
     </android.support.design.widget.TextInputLayout>
 
+        <Button
+            android:id="@+id/fbBtn"
+            android:text="Login with Facebook"
+            android:layout_height="64dp"
+            android:layout_marginTop="16dp"
+            android:textSize="18sp"
+            android:textColor="@color/cpb_white"
+            android:background="@color/cpb_blue"
+            android:layout_width="match_parent" />
+
 
         <com.dd.CircularProgressButton
             android:id="@+id/btn_login"
