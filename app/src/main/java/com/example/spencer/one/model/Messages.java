@@ -31,7 +31,7 @@ public class Messages {
         return usersConcatIds;
     }
 
-    public void setUsersConcatIds(String usersConcatIds) {
+    public void setUsersConcatIdds(String usersConcatIds) {
         this.usersConcatIds = usersConcatIds;
     }
 

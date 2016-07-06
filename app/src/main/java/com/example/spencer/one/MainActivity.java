@@ -162,6 +162,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.actionStart:
                 startActivity(new Intent(MainActivity.this, ProfileActivity.class));
                 break;
+            case R.id.actionQR:
+                startActivity(new Intent(MainActivity.this, QRcodeActivity.class));
+                break;
             default:
                 break;
         }
