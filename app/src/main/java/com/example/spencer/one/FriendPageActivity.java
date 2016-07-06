@@ -2,6 +2,13 @@ package com.example.spencer.one;
 
 import android.content.Intent;
 import android.provider.ContactsContract;
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Typeface;
+import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
+import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.example.spencer.one.recyclerViewItems.FriendViewHolder;
@@ -23,11 +31,13 @@ public class FriendPageActivity extends AppCompatActivity {
     private String friendEmail = "";
     private String friendName = "";
     private String friendPhoneNumber = "";
-    private String friendID;
     private TextView tvFriendEmail;
     private TextView tvFriendUsername;
+    private String friendID;
     private TextView tvFriendSnapchat;
     private TextView tvFriendPhoneNumber;
+    private Button btnPhoneNumber;
+    private Button btnEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +48,8 @@ public class FriendPageActivity extends AppCompatActivity {
         tvFriendUsername = (TextView) findViewById(R.id.tvFriendUsername);
         tvFriendSnapchat = (TextView) findViewById(R.id.tvFriendSnapchat);
         tvFriendPhoneNumber = (TextView) findViewById(R.id.tvFriendPhoneNumber);
+        btnPhoneNumber = (Button) findViewById(R.id.callClick);
+        btnEmail = (Button) findViewById(R.id.emailClick);
 
         Button btnAddContact = (Button) findViewById(R.id.btnAddContact);
         btnAddContact.setOnClickListener(new View.OnClickListener() {
@@ -56,7 +68,6 @@ public class FriendPageActivity extends AppCompatActivity {
         });
 
 
-
         Bundle friendIdBundle = getIntent().getExtras();
         if (friendIdBundle != null) {
             friendID = friendIdBundle.getString(FriendViewHolder.FRIEND_ID);
@@ -67,38 +78,63 @@ public class FriendPageActivity extends AppCompatActivity {
     private void toMessagesActivity() {
         Intent messagesIntent = new Intent(FriendPageActivity.this, MessagesActivity.class);
         messagesIntent.putExtra(FRIEND_ID, friendID);
-        messagesIntent.putExtra(FRIEND_USERNAME,friendName);
+        messagesIntent.putExtra(FRIEND_USERNAME, friendName);
         startActivity(messagesIntent);
     }
 
     private void addContact() {
-        Intent addContactIntent =  new Intent(ContactsContract.Intents.Insert.ACTION);
+        Intent addContactIntent = new Intent(ContactsContract.Intents.Insert.ACTION);
         addContactIntent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
         addContactIntent.putExtra(ContactsContract.Intents.Insert.EMAIL, friendEmail);
         addContactIntent.putExtra(ContactsContract.Intents.Insert.PHONE, friendPhoneNumber);
         addContactIntent.putExtra(ContactsContract.Intents.Insert.NAME, friendName);
         startActivity(addContactIntent);
-        Toast.makeText(FriendPageActivity.this, friendName+" added to your contacts!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(FriendPageActivity.this, friendName + " added to your contacts!", Toast.LENGTH_SHORT).show();
     }
 
 
     private void getFriendInfo() {
         Backendless.Persistence.of(Users.class).findById(friendID, new AsyncCallback<Users>() {
             @Override
-            public void handleResponse(Users response) {
-                friendEmail = response.getEmail();
-                friendName = response.getName();
-                friendPhoneNumber = response.getPhone_Number();
-
+            public void handleResponse(final Users response) {
                 tvFriendUsername.setText(response.getUserName());
-                tvFriendEmail.setText("Email: " + friendEmail);
-                if(response.getSnapchat()!=null){
-                    tvFriendSnapchat.setText("Snapchat: " + response.getSnapchat());
+                tvFriendEmail.setText(response.getEmail());
+                btnEmail.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent emailintent = new Intent(android.content.Intent.ACTION_SEND);
+                        emailintent.setType("plain/text");
+                        emailintent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{response.getEmail()});
+                        emailintent.putExtra(android.content.Intent.EXTRA_SUBJECT, "");
+                        emailintent.putExtra(android.content.Intent.EXTRA_TEXT, "");
+                        startActivity(Intent.createChooser(emailintent, "Send mail..."));
+                    }
+                });
+                if (response.getSnapchat() != null) {
+                    tvFriendSnapchat.setText(response.getSnapchat());
+                } else {
+                    tvFriendSnapchat.setText("No snapchat listed");
                 }
-                if(response.getPhone_Number()!=null){
-                    tvFriendPhoneNumber.setText("Phone Number: " +friendPhoneNumber);
+                if (response.getPhone_Number() != null) {
+                    tvFriendPhoneNumber.setText(response.getPhone_Number());
+                    btnPhoneNumber.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent callIntent = new Intent(Intent.ACTION_CALL);
+                            callIntent.setData(Uri.parse("tel:" + response.getPhone_Number()));
+                            if (ActivityCompat.checkSelfPermission(FriendPageActivity.this, Manifest.permission.CALL_PHONE)
+                                    != PackageManager.PERMISSION_GRANTED) {
+                                // TODO: Consider calling
+                                Toast.makeText(FriendPageActivity.this, "Calling Permission Disabled",
+                                        Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            startActivity(callIntent);
+                        }
+                    });
+                } else {
+                    tvFriendPhoneNumber.setText("No phone number listed");
                 }
-
             }
 
             @Override

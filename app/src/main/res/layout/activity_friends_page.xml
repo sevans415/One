@@ -8,6 +8,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
+    android:weightSum="6"
     tools:context=".FriendPageActivity">
 
     <TextView
@@ -19,34 +20,84 @@
         android:textStyle="bold"
         android:textColor="@color/cpb_blue_dark"/>
 
-
-    <TextView
-        android:id="@+id/tvFriendEmail"
+    <LinearLayout
+        android:paddingTop="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="22dp"/>
+        android:layout_height="0dp"
+        android:weightSum="6"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/emailClick"
+            android:layout_width="0dp"
+            android:layout_weight="1.25"
+            android:layout_height="wrap_content"
+            android:background="@drawable/mail" />
+        <TextView
+            android:paddingLeft="10dp"
+            android:layout_weight="4.75"
+            android:id="@+id/tvFriendEmail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:clickable="true"/>
+    </LinearLayout>
 
-    <TextView
+    <LinearLayout
+        android:paddingTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:weightSum="6"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1.25"
+            android:layout_height="wrap_content"
+            android:background="@drawable/snapchat"/>
+        <TextView
+            android:paddingLeft="10dp"
         android:id="@+id/tvFriendSnapchat"
-        android:layout_width="match_parent"
+        android:layout_weight="4.75"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="22dp"/>
-    <TextView
-        android:id="@+id/tvFriendPhoneNumber"
+        android:textSize="18dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:paddingTop="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="22dp"/>
+        android:layout_height="0dp"
+        android:weightSum="6"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/callClick"
+            android:layout_width="0dp"
+            android:layout_weight="1.25"
+            android:layout_height="wrap_content"
+            android:background="@drawable/phone"/>
+        <TextView
+            android:paddingLeft="10dp"
+            android:id="@+id/tvFriendPhoneNumber"
+            android:layout_weight="4.75"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:clickable="true"/>
+    </LinearLayout>
 
     <Button
+        android:layout_weight="1"
         android:id="@+id/btnAddContact"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:text="Add to contacts"/>
 
     <Button
+        android:layout_weight="1"
         android:id="@+id/btnMessages"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:text="Messages"/>
 
 </LinearLayout>
