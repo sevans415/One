@@ -21,9 +21,6 @@ import butterknife.InjectView;
 public class ProfileActivity extends AppCompatActivity {
 
     public static final String ERROR = "Error";
-    public static final String SNAPCHAT_ADDED = "Snapchat Added!";
-    public static final String NUMBER_ADDED = "Number Added!";
-    public static final String EMAIL_UPDATED = "Email Updated";
     private BackendlessUser currentUser;
     private EditText etPhoneNumber;
     private Button phoneNumberBtn;
@@ -49,26 +46,44 @@ public class ProfileActivity extends AppCompatActivity {
         phoneNumberBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addNumber();
+                String phoneNumber = etPhoneNumber.getText().toString();
+                addProperty("phoneNumber", phoneNumber);
             }
         });
         snapchatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addSnapchat();
+                String snapchat = etSnapchat.getText().toString();
+                addProperty("Snapchat", snapchat);
             }
         });
         emailBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addEmail();
+                String email = etEmail.getText().toString();
+                addProperty("email", email);
             }
         });
 
     }
 
+    private void addProperty(final String property, String value){
+        currentUser.setProperty(property, value);
+        Backendless.UserService.update(currentUser, new AsyncCallback<BackendlessUser>() {
+            @Override
+            public void handleResponse(BackendlessUser response) {
+                Toast.makeText(ProfileActivity.this, property+" updated!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                Toast.makeText(ProfileActivity.this, ERROR, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+/*
     private void addNumber(){
-        String phoneNumber = etPhoneNumber.getText().toString();
         currentUser.setProperty("Phone_Number", phoneNumber);
         Backendless.UserService.update(currentUser, new AsyncCallback<BackendlessUser>() {
             @Override
@@ -84,7 +99,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void addSnapchat(){
-        String snapchat = etSnapchat.getText().toString();
         currentUser.setProperty("Snapchat", snapchat);
         Backendless.UserService.update(currentUser, new AsyncCallback<BackendlessUser>() {
             @Override
@@ -113,6 +127,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
     }
+    */
 
     public void setHints(){
         Backendless.Persistence.of(Users.class).findById(currentUser.getUserId(), new AsyncCallback<Users>() {

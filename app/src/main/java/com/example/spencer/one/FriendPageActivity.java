@@ -1,12 +1,7 @@
 package com.example.spencer.one;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Typeface;
-import android.net.Uri;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationCompat;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,7 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
-import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.example.spencer.one.recyclerViewItems.FriendViewHolder;
@@ -24,10 +18,14 @@ import com.example.spencer.one.model.Users;
 
 public class FriendPageActivity extends AppCompatActivity {
 
-    private TextView tvFriendEmail;
-    private String friendEmail;
-    private TextView tvFriendUsername;
+    public static final String FRIEND_ID = "friendID";
+    public static final String FRIEND_USERNAME = "friend username";
+    private String friendEmail = "";
+    private String friendName = "";
+    private String friendPhoneNumber = "";
     private String friendID;
+    private TextView tvFriendEmail;
+    private TextView tvFriendUsername;
     private TextView tvFriendSnapchat;
     private TextView tvFriendPhoneNumber;
     private Button btnPhoneNumber;
@@ -47,6 +45,24 @@ public class FriendPageActivity extends AppCompatActivity {
         btnEmail = (Button) findViewById(R.id.emailClick);
         fbBtn = (Button) findViewById(R.id.goToFb);
 
+        Button btnAddContact = (Button) findViewById(R.id.btnAddContact);
+        btnAddContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addContact();
+            }
+        });
+
+        Button btnMessages = (Button) findViewById(R.id.btnMessages);
+        btnMessages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toMessagesActivity();
+            }
+        });
+
+
+
         Bundle friendIdBundle = getIntent().getExtras();
         if (friendIdBundle != null) {
             friendID = friendIdBundle.getString(FriendViewHolder.FRIEND_ID);
@@ -57,10 +73,35 @@ public class FriendPageActivity extends AppCompatActivity {
                 goToFb();
             }
         });
+        getFriendInfo();
+    }
 
+    private void toMessagesActivity() {
+        Intent messagesIntent = new Intent(FriendPageActivity.this, MessagesActivity.class);
+        messagesIntent.putExtra(FRIEND_ID, friendID);
+        messagesIntent.putExtra(FRIEND_USERNAME,friendName);
+        startActivity(messagesIntent);
+    }
+
+    private void addContact() {
+        Intent addContactIntent =  new Intent(ContactsContract.Intents.Insert.ACTION);
+        addContactIntent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+        addContactIntent.putExtra(ContactsContract.Intents.Insert.EMAIL, friendEmail);
+        addContactIntent.putExtra(ContactsContract.Intents.Insert.PHONE, friendPhoneNumber);
+        addContactIntent.putExtra(ContactsContract.Intents.Insert.NAME, friendName);
+        startActivity(addContactIntent);
+        Toast.makeText(FriendPageActivity.this, friendName+" added to your contacts!", Toast.LENGTH_SHORT).show();
+    }
+
+
+    private void getFriendInfo() {
         Backendless.Persistence.of(Users.class).findById(friendID, new AsyncCallback<Users>() {
             @Override
-            public void handleResponse(final Users response) {
+            public void handleResponse(Users response) {
+                friendEmail = response.getEmail();
+                friendName = response.getName();
+                friendPhoneNumber = response.getPhone_Number();
+
                 tvFriendUsername.setText(response.getUserName());
                 tvFriendEmail.setText(response.getEmail());
                 btnEmail.setOnClickListener(new View.OnClickListener() {
@@ -108,8 +149,6 @@ public class FriendPageActivity extends AppCompatActivity {
                 Log.d("TAG", "server error: " + fault.getMessage());
             }
         });
-
-
     }
 
     public void goToFb(){

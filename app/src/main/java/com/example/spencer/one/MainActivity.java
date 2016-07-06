@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -132,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
                     tvNoFrands.setVisibility(View.VISIBLE);
                 } else {
                     RecyclerView friendsRecyclerView = (RecyclerView) findViewById(R.id.friends);
-                    final LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+                    final GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this, 2);
                     friendsRecyclerView.setLayoutManager(layoutManager);
 
                     friendsAdapter = new FriendsAdapter(friendIDList);
