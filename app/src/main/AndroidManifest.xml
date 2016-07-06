@@ -4,7 +4,14 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <activity
+        android:name="com.facebook.FacebookActivity"
+        android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
     <application
         android:name=".OneApplication"
@@ -13,7 +20,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight">
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,12 +38,8 @@
         <activity android:name=".FriendPageActivity" />
         <activity android:name=".AddFriendActivity" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".MessagesActivity"></activity>
+        <activity android:name=".MessagesActivity" />
+        <activity android:name=".QRcodeActivity"></activity>
     </application>
-    <activity android:name="com.facebook.FacebookActivity"
-        android:configChanges=
-            "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-        android:theme="@android:style/Theme.Translucent.NoTitleBar"
-        android:label="@string/app_name" />
 
 </manifest>
