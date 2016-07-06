@@ -36,7 +36,8 @@
             android:id="@+id/tvFriendEmail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="22dp" />
+            android:textSize="22dp"
+            android:clickable="true"/>
     </LinearLayout>
 
     <LinearLayout
@@ -73,7 +74,8 @@
             android:layout_weight="5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="22dp"/>
+            android:textSize="22dp"
+            android:clickable="true"/>
     </LinearLayout>
 
 </LinearLayout>

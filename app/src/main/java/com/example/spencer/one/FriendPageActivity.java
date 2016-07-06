@@ -1,8 +1,14 @@
 package com.example.spencer.one;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,16 +45,42 @@ public class FriendPageActivity extends AppCompatActivity {
 
         Backendless.Persistence.of(Users.class).findById(friendID, new AsyncCallback<Users>() {
             @Override
-            public void handleResponse(Users response) {
+            public void handleResponse(final Users response) {
                 tvFriendUsername.setText(response.getUserName());
-                tvFriendEmail.setText("Email: " + response.getEmail());
-                if(response.getSnapchat()!=null){
-                    tvFriendSnapchat.setText("Snapchat: " + response.getSnapchat());
-                }else {
+                tvFriendEmail.setText(response.getEmail());
+                tvFriendEmail.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent emailintent = new Intent(android.content.Intent.ACTION_SEND);
+                        emailintent.setType("plain/text");
+                        emailintent.putExtra(android.content.Intent.EXTRA_EMAIL,new String[] {response.getEmail()});
+                        emailintent.putExtra(android.content.Intent.EXTRA_SUBJECT, "");
+                        emailintent.putExtra(android.content.Intent.EXTRA_TEXT,"");
+                        startActivity(Intent.createChooser(emailintent, "Send mail..."));
+                    }
+                });
+                if (response.getSnapchat() != null) {
+                    tvFriendSnapchat.setText(response.getSnapchat());
+                } else {
                     tvFriendSnapchat.setText("No snapchat listed");
                 }
-                if(response.getPhone_Number()!=null){
-                    tvFriendPhoneNumber.setText("Phone Number: " + response.getPhone_Number());
+                if (response.getPhone_Number() != null) {
+                    tvFriendPhoneNumber.setText(response.getPhone_Number());
+                    tvFriendPhoneNumber.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent callIntent = new Intent(Intent.ACTION_CALL);
+                            callIntent.setData(Uri.parse("tel:" + response.getPhone_Number()));
+                            if (ActivityCompat.checkSelfPermission(FriendPageActivity.this, Manifest.permission.CALL_PHONE)
+                                    != PackageManager.PERMISSION_GRANTED) {
+                                // TODO: Consider calling
+                                Toast.makeText(FriendPageActivity.this, "Calling Permission Disabled",
+                                        Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            startActivity(callIntent);
+                        }
+                    });
                 }else{
                     tvFriendPhoneNumber.setText("No phone number listed");
                 }
