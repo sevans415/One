@@ -3,12 +3,15 @@ package com.example.spencer.one;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +30,8 @@ public class FriendPageActivity extends AppCompatActivity {
     private String friendID;
     private TextView tvFriendSnapchat;
     private TextView tvFriendPhoneNumber;
+    private Button btnPhoneNumber;
+    private Button btnEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +42,8 @@ public class FriendPageActivity extends AppCompatActivity {
         tvFriendUsername = (TextView) findViewById(R.id.tvFriendUsername);
         tvFriendSnapchat = (TextView) findViewById(R.id.tvFriendSnapchat);
         tvFriendPhoneNumber = (TextView) findViewById(R.id.tvFriendPhoneNumber);
+        btnPhoneNumber = (Button) findViewById(R.id.callClick);
+        btnEmail = (Button) findViewById(R.id.emailClick);
 
         Bundle friendIdBundle = getIntent().getExtras();
         if (friendIdBundle != null) {
@@ -48,7 +55,7 @@ public class FriendPageActivity extends AppCompatActivity {
             public void handleResponse(final Users response) {
                 tvFriendUsername.setText(response.getUserName());
                 tvFriendEmail.setText(response.getEmail());
-                tvFriendEmail.setOnClickListener(new View.OnClickListener() {
+                btnEmail.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent emailintent = new Intent(android.content.Intent.ACTION_SEND);
@@ -66,7 +73,7 @@ public class FriendPageActivity extends AppCompatActivity {
                 }
                 if (response.getPhone_Number() != null) {
                     tvFriendPhoneNumber.setText(response.getPhone_Number());
-                    tvFriendPhoneNumber.setOnClickListener(new View.OnClickListener() {
+                    btnPhoneNumber.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Intent callIntent = new Intent(Intent.ACTION_CALL);
