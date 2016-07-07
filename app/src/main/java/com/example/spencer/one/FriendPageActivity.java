@@ -87,11 +87,11 @@ public class FriendPageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent emailintent = new Intent(android.content.Intent.ACTION_SEND);
-                emailintent.setType("plain/text");
+                emailintent.setType(getString(R.string.plain_text));
                 emailintent.putExtra(android.content.Intent.EXTRA_EMAIL,new String[] {friendEmail});
                 emailintent.putExtra(android.content.Intent.EXTRA_SUBJECT, "");
                 emailintent.putExtra(android.content.Intent.EXTRA_TEXT,"");
-                startActivity(Intent.createChooser(emailintent, "Send mail..."));
+                startActivity(Intent.createChooser(emailintent, getString(R.string.sending_mail)));
             }
         });
     }
@@ -110,7 +110,7 @@ public class FriendPageActivity extends AppCompatActivity {
         addContactIntent.putExtra(ContactsContract.Intents.Insert.PHONE, friendPhoneNumber);
         addContactIntent.putExtra(ContactsContract.Intents.Insert.NAME, friendName);
         startActivity(addContactIntent);
-        Toast.makeText(FriendPageActivity.this, friendName+" added to your contacts!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(FriendPageActivity.this, friendName+getString(R.string.added_contact), Toast.LENGTH_SHORT).show();
     }
 
 
@@ -128,7 +128,7 @@ public class FriendPageActivity extends AppCompatActivity {
                 if (response.getSnapchat() != null) {
                     tvFriendSnapchat.setText(response.getSnapchat());
                 } else {
-                    tvFriendSnapchat.setText("No snapchat listed");
+                    tvFriendSnapchat.setText(R.string.no_snapchat);
                 }
                 if (response.getPhoneNumber() != null) {
                     tvFriendPhoneNumber.setText(response.getPhoneNumber());
@@ -139,7 +139,7 @@ public class FriendPageActivity extends AppCompatActivity {
                             callIntent.setData(Uri.parse("tel:" + friendPhoneNumber));
                             if (ActivityCompat.checkSelfPermission(FriendPageActivity.this, Manifest.permission.CALL_PHONE)
                                     != PackageManager.PERMISSION_GRANTED) {
-                                Toast.makeText(FriendPageActivity.this, "Calling Permission Disabled",
+                                Toast.makeText(FriendPageActivity.this, R.string.calling_permission_no,
                                         Toast.LENGTH_SHORT).show();
                                 return;
                             }
@@ -147,15 +147,14 @@ public class FriendPageActivity extends AppCompatActivity {
                         }
                     });
                 }else{
-                    tvFriendPhoneNumber.setText("No phone number listed");
+                    tvFriendPhoneNumber.setText(R.string.no_phone);
                 }
 
             }
 
             @Override
             public void handleFault(BackendlessFault fault) {
-                Toast.makeText(FriendPageActivity.this, "Server Error: " + fault.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.d("TAG", "server error: " + fault.getMessage());
+                Toast.makeText(FriendPageActivity.this, getString(R.string.server_error) + fault.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -165,12 +164,12 @@ public class FriendPageActivity extends AppCompatActivity {
             @Override
             public void handleResponse(Users response) {
                 if(response.getFbid()!=null){
-                    String url = "https://www.facebook.com/"+ response.getFbid();
+                    String url = getString(R.string.facebook_glide)+ response.getFbid();
                     Uri uriUrl = Uri.parse(url);
                     Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
                     startActivity(launchBrowser);
                 }else {
-                    Toast.makeText(FriendPageActivity.this, "User has no Facebook connected"
+                    Toast.makeText(FriendPageActivity.this, R.string.no_facebook
                             , Toast.LENGTH_LONG).show();
                 }
             }

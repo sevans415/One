@@ -34,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:hint="Type your friends email here"
+        android:hint="@string/type_your_friends_email_here"
         android:textSize="20sp" />
 
     <com.dd.CircularProgressButton
@@ -47,7 +47,7 @@
         app:cpb_textComplete="Complete"
         app:cpb_textError="Error"
         android:layout_gravity="center"
-        app:cpb_textIdle="Save" />
+        app:cpb_textIdle="@string/save_add" />
 
     <ImageView
         android:paddingTop="20dp"

@@ -7,6 +7,66 @@
     <string name="enter_snapchat">Enter Snapchat</string>
 
     <string name="facebook_app_id">1240272409358328</string>
+    <string name="conversation_with">"Conversastion with "</string>
+    <string name="username">userName</string>
+    <string name="messages_loaded">Messages loaded</string>
+    <string name="conversation_created">Conversation created</string>
+    <string name="error">"Error creating convo: "</string>
+    <string name="message_sent">Message sent</string>
+    <string name="sent">sent</string>
+    <string name="concat_ids">usersConcatIds = \'</string>
+    <string name="concat_ids2">\' or usersConcatIds = \'</string>
+    <string name="empty">Empty</string>
+    <string name="messages_error">Error</string>
+    <string name="add_friend">Add Friend</string>
+    <string name="graph_glide">http://graph.facebook.com/</string>
+    <string name="glide_picture">/picture?type=large</string>
+    <string name="type_friends">"Type your friends "</string>
+    <string name="here">" here"</string>
+    <string name="phone_number_add">Phone_Number</string>
+    <string name="find_friend_error">We could not find the user \'</string>
+    <string name="error_part_2">\' in our database</string>
+    <string name="cant_add_self">You can\'t add yourself as a friend, ya dumby</string>
+    <string name="friend_confirmation">" added as a friend"</string>
+    <string name="saving_friend_error">"Error saving friend: "</string>
+    <string name="find_error">"Error finding user: "</string>
+    <string name="plain_text">plain/text</string>
+    <string name="sending_mail">Send mail...</string>
+    <string name="added_contact">" added to your contacts!"</string>
+    <string name="calling_permission_no">Calling Permission Disabled</string>
+    <string name="no_snapchat">No snapchat listed</string>
+    <string name="no_phone">No phone number listed</string>
+    <string name="server_error">"Server Error: "</string>
+    <string name="facebook_glide">https://www.facebook.com/</string>
+    <string name="no_facebook">User has no Facebook connected</string>
+    <string name="failed_login">Login failed</string>
+    <string name="bad_email">enter a valid email address</string>
+    <string name="validate_pword">between 4 and 10 alphanumeric characters</string>
+    <string name="email_string">email</string>
+    <string name="removed_duplicate">"Removed duplicate friend: "</string>
+    <string name="contacting_server_error">Error contacting server</string>
+    <string name="main_current_id">currentUserId = \'</string>
+    <string name="retrieving_friends_error">"Error retrieving your friends: "</string>
+    <string name="enter_snapchat_profile">Enter Snapchat</string>
+    <string name="enter_number">Enter Phone Number</string>
+    <string name="profile_updated">" updated!"</string>
+    <string name="logging_out_error">Error Logging out</string>
+    <string name="friend_added">" added as a friend"</string>
+    <string name="failed_registration">"Registration Failed: "</string>
+    <string name="registration_success">You are registered!</string>
+    <string name="at_least_3">at least 3 characters</string>
+    <string name="enter_valid_email">enter a valid email address</string>
+    <string name="between_4_and_10">between 4 and 10 alphanumeric characters</string>
+    <string name="type_your_friends_email_here">Type your friends email here</string>
+    <string name="save_add">Save</string>
+    <string name="goto_fb">Go to User\'s Facebook Page</string>
+    <string name="addto_contacts">Add to contacts</string>
+    <string name="no_account_yet_create_one">No account yet? Create one</string>
+    <string name="login_with_facebook">Login with Facebook</string>
+    <string name="add_new_friend">add new friend</string>
+    <string name="type_message_here">Type message here</string>
+    <string name="create_account">Create Account</string>
+    <string name="already_a_member_login">Already a member? Login</string>
     <string-array name="query_options_array">
         <item>username</item>
         <item>email</item>

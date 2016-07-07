@@ -88,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
         boolean notDuplicateFriend = true;
         friendIDList = friendsAdapter.getFriendsList();
         for (final Friends friend : friendIDList) {
-            Log.d("TAG", "friend: "+friend.getFriendId()+" newFriend: "+newFriend.getFriendId());
             if (friend.getFriendId().equals(newFriend.getFriendId())) {
                 notDuplicateFriend = false;
 
@@ -98,20 +97,17 @@ public class MainActivity extends AppCompatActivity {
                         Backendless.Persistence.of(Friends.class).remove(response, new AsyncCallback<Long>() {
                             @Override
                             public void handleResponse(Long response) {
-                                Toast.makeText(MainActivity.this, "Removed duplicate friend: "+ newFriend.getUserName(), Toast.LENGTH_SHORT).show();
-                                Log.d("TAG","removed "+newFriend.getUserName()+"as friend of "+friend.getUserName());
+                                Toast.makeText(MainActivity.this, getString(R.string.removed_duplicate)+ newFriend.getUserName(), Toast.LENGTH_SHORT).show();
                             }
                             @Override
                             public void handleFault(BackendlessFault fault) {
-                                Toast.makeText(MainActivity.this, "Error contacting server", Toast.LENGTH_SHORT).show();
-                                Log.d("TAG", "error: "+fault.getMessage());
+                                Toast.makeText(MainActivity.this, R.string.contacting_server_error, Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
                     @Override
                     public void handleFault(BackendlessFault fault) {
-                        Toast.makeText(MainActivity.this, "Error contacting server", Toast.LENGTH_SHORT).show();
-                        Log.d("TAG", "error: "+fault.getMessage());
+                        Toast.makeText(MainActivity.this, R.string.contacting_server_error, Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -122,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
     private void initFriendsListView() {
         BackendlessUser user = Backendless.UserService.CurrentUser();
         BackendlessDataQuery friendListQuery = new BackendlessDataQuery();
-        friendListQuery.setWhereClause("currentUserId = '" + user.getObjectId() + "'");
+        friendListQuery.setWhereClause(getString(R.string.main_current_id) + user.getObjectId() + "'");
         Backendless.Persistence.of(Friends.class).find(friendListQuery, new AsyncCallback<BackendlessCollection<Friends>>() {
             @Override
             public void handleResponse(BackendlessCollection<Friends> response) {
@@ -145,8 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void handleFault(BackendlessFault fault) {
-                Toast.makeText(MainActivity.this, "Error retrieving your friends: "+fault.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.d("TAG", "getting friend Id error: " + fault.getMessage());
+                Toast.makeText(MainActivity.this, getString(R.string.retrieving_friends_error)+fault.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

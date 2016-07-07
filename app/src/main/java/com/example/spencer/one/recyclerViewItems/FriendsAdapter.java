@@ -55,7 +55,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendViewHolder> {
         holder.itemView.setTag(friendObject);
         holder.friendID = friendObject.getFriendId();
         holder.fbid = friendObject.getFbid();
-        Log.d("TAG", friendUsername+"adapter: "+friendObject.getFbid());
         if (friendObject.getFbid() == null) {
             Random randomImage = new Random();
             int n = randomImage.nextInt(9);
@@ -81,7 +80,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendViewHolder> {
             }
 
         } else {
-            String url = "http://graph.facebook.com/"+friendObject.getFbid()+"/picture?type=large";
+            String url = context.getString(R.string.graph_glide)+friendObject.getFbid()+context.getString(R.string.glide_picture);
             Glide.with(context).load(url).into(holder.ivFbPhoto);
         }
     }
@@ -94,7 +93,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendViewHolder> {
     public void addItem(Friends newFriend) {
         boolean notDuplicateFriend = true;
         for (Friends friend : friendsList) {
-            Log.d("TAG", "friend: "+friend.getFriendId()+" newFriend: "+newFriend.getFriendId());
             if (friend.getFriendId().equals(newFriend.getFriendId())) {
 
                 notDuplicateFriend = false;

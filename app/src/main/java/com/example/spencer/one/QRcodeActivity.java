@@ -159,15 +159,14 @@ public class QRcodeActivity extends AppCompatActivity {
                             result.putExtra(AddFriendActivity.OBJECT_ID, response.getObjectId());
                             setResult(Activity.RESULT_OK, result);
                             successEndBtnAnimation();
-                            Toast.makeText(QRcodeActivity.this, friendName + " added as a friend", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(QRcodeActivity.this, friendName + getString(R.string.friend_added), Toast.LENGTH_SHORT).show();
                             finish();
                         }
                         @Override
                         public void handleFault(BackendlessFault fault) {
                             faultEndBtnAnimation();
-                            Toast.makeText(QRcodeActivity.this, "Error saving friend: "+
+                            Toast.makeText(QRcodeActivity.this, R.string.saving_friend_error+
                                     fault.getMessage(), Toast.LENGTH_SHORT).show();
-                            Log.d("TAG", "SAVing friend error: " + fault.getMessage());
                             finish();
                         }
                     });

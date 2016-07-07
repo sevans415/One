@@ -61,7 +61,7 @@ public class AddFriendActivity extends AppCompatActivity {
         querySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                etFriendInput.setHint("Type your friends "+parent.getItemAtPosition(position).toString()+" here");
+                etFriendInput.setHint(getString(R.string.type_friends)+parent.getItemAtPosition(position).toString()+getString(R.string.here));
             }
 
             @Override
@@ -78,7 +78,7 @@ public class AddFriendActivity extends AppCompatActivity {
                 String selectedQuery = querySpinner.getSelectedItem().toString();
                 String queryType;
                 if (selectedQuery.matches("phone number"))
-                    queryType = "Phone_Number";
+                    queryType = getString(R.string.phone_number_add);
                 else queryType = selectedQuery;
                 saveFriend(queryType);
             }
@@ -98,11 +98,11 @@ public class AddFriendActivity extends AppCompatActivity {
             @Override
             public void handleResponse(BackendlessCollection<Users> response) {
                 if (response.getData().isEmpty()) {
-                    Toast.makeText(AddFriendActivity.this, "We could not find the user '"+
-                            friendsInfo+"' in our database", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddFriendActivity.this, getString(R.string.find_friend_error)+
+                            friendsInfo+getString(R.string.error_part_2), Toast.LENGTH_SHORT).show();
                 }
                 else if (response.getData().get(0).getObjectId().equals(Backendless.UserService.CurrentUser().getUserId())) {
-                    Toast.makeText(AddFriendActivity.this, "You can't add yourself as a friend, ya dumby", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddFriendActivity.this, R.string.cant_add_self, Toast.LENGTH_SHORT).show();
                 } else {
                     final Friends friendToAdd = new Friends();
                     friendToAdd.setCurrentUserId(Backendless.UserService.CurrentUser().getUserId());
@@ -110,7 +110,6 @@ public class AddFriendActivity extends AppCompatActivity {
                     friendToAdd.setActualName(response.getData().get(0).getName());
                     friendToAdd.setUserName(response.getData().get(0).getUserName());
                     friendToAdd.setFbid(response.getData().get(0).getFbid());
-                    Log.d("TAG","Adding fbid: "+response.getData().get(0).getFbid());
 
                     Backendless.Persistence.of(Friends.class).save(friendToAdd, new AsyncCallback<Friends>() {
                         @Override
@@ -126,12 +125,11 @@ public class AddFriendActivity extends AppCompatActivity {
                             result.putExtra(CURRENT_USER_ID, friendToAdd.getCurrentUserId());
                             result.putExtra(OBJECT_ID, response.getObjectId());
                             result.putExtra(FBID,friendToAdd.getFbid());
-                            Log.d("TAG", "ADDING FRIEND: "+response.getFbid());
                             setResult(Activity.RESULT_OK, result);
 
                             successEndButtonAnimation();
 
-                            Toast.makeText(AddFriendActivity.this, friendName + " added as a friend", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddFriendActivity.this, friendName + getString(R.string.friend_confirmation), Toast.LENGTH_SHORT).show();
                             finish();
                         }
 
@@ -140,9 +138,8 @@ public class AddFriendActivity extends AppCompatActivity {
 
                             faultEndButtonAnimation();
 
-                            Toast.makeText(AddFriendActivity.this, "Error saving friend: "+
+                            Toast.makeText(AddFriendActivity.this, getString(R.string.saving_friend_error)+
                                     fault.getMessage(), Toast.LENGTH_SHORT).show();
-                            Log.d("TAG", "SAVing friend error: " + fault.getMessage());
                             finish();
                         }
                     });
@@ -152,8 +149,7 @@ public class AddFriendActivity extends AppCompatActivity {
             @Override
             public void handleFault(BackendlessFault fault) {
                 faultEndButtonAnimation();
-                Toast.makeText(AddFriendActivity.this, "Error finding user: "+fault.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.d("TAG","FINDing friend error: "+fault.getMessage());
+                Toast.makeText(AddFriendActivity.this, getString(R.string.find_error)+fault.getMessage(), Toast.LENGTH_SHORT).show();
                 finish();
 
             }

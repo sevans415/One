@@ -42,12 +42,12 @@ public class MessagesActivity extends AppCompatActivity {
 
         friendID = getIntent().getExtras().get(FriendPageActivity.FRIEND_ID).toString();
         friendUsername = getIntent().getExtras().get(FriendPageActivity.FRIEND_USERNAME).toString();
-        currentUserName = Backendless.UserService.CurrentUser().getProperty("userName").toString();
+        currentUserName = Backendless.UserService.CurrentUser().getProperty(getString(R.string.username)).toString();
         concatIdOne = friendID + Backendless.UserService.CurrentUser().getObjectId();
         concatIdTwo = Backendless.UserService.CurrentUser().getObjectId() + friendID;
 
         TextView tvHeader = (TextView) findViewById(R.id.tvHeader);
-        tvHeader.setText("Conversastion with "+friendUsername);
+        tvHeader.setText(getString(R.string.conversation_with)+friendUsername);
 
         Button btnSend = (Button) findViewById(R.id.btnSendMessage);
         btnSend.setOnClickListener(new View.OnClickListener() {
@@ -63,7 +63,7 @@ public class MessagesActivity extends AppCompatActivity {
 
     private void refresh() {
         BackendlessDataQuery convoQuery = new BackendlessDataQuery();
-        convoQuery.setWhereClause("usersConcatIds = '" + concatIdOne + "' or usersConcatIds = '" + concatIdTwo + "'");
+        convoQuery.setWhereClause(getString(R.string.concat_ids) + concatIdOne + getString(R.string.concat_ids2) + concatIdTwo + "'");
         Backendless.Persistence.of(Messages.class).find(convoQuery, new AsyncCallback<BackendlessCollection<Messages>>() {
             @Override
             public void handleResponse(BackendlessCollection<Messages> response) {
@@ -73,8 +73,7 @@ public class MessagesActivity extends AppCompatActivity {
                     messageObject = response.getData().get(0);
                     convo = response.getData().get(0).getConvo();
                     tvConvo.setText(convo);
-                    Toast.makeText(MessagesActivity.this, "Messages loaded", Toast.LENGTH_SHORT).show();
-                    Log.d("TAG", "messages: "+convo);
+                    Toast.makeText(MessagesActivity.this, R.string.messages_loaded, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -91,14 +90,13 @@ public class MessagesActivity extends AppCompatActivity {
             @Override
             public void handleResponse(Messages response) {
                 messageObject = response;
-                Toast.makeText(MessagesActivity.this, "Conversation created", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MessagesActivity.this, R.string.conversation_created, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void handleFault(BackendlessFault fault) {
-                Toast.makeText(MessagesActivity.this, "Error creating convo: " + fault.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.d("TAG", fault.getMessage());
-                Log.d("TAG", concatIdOne);
+                Toast.makeText(MessagesActivity.this, getString(R.string.error) + fault.getMessage(), Toast.LENGTH_SHORT).show();
+               ;
             }
         });
     }
@@ -110,18 +108,17 @@ public class MessagesActivity extends AppCompatActivity {
         Backendless.Persistence.save(messageObject, new AsyncCallback<Messages>() {
             @Override
             public void handleResponse(Messages response) {
-                Toast.makeText(MessagesActivity.this, "Message sent", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MessagesActivity.this, R.string.message_sent, Toast.LENGTH_SHORT).show();
                 refresh();
             }
 
             @Override
             public void handleFault(BackendlessFault fault) {
-                Toast.makeText(MessagesActivity.this, "error sending message: "+fault.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.d("TAG","sending message error: "+fault.getMessage());
+                Toast.makeText(MessagesActivity.this, R.string.error+fault.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
-        Toast.makeText(MessagesActivity.this, "sent", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MessagesActivity.this, R.string.sent, Toast.LENGTH_SHORT).show();
     }
 
     @Override

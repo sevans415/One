@@ -96,7 +96,7 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void handleFault(BackendlessFault fault) {
                 Log.d("TAG",fault.getMessage());
-                Toast.makeText(SignupActivity.this, "Registration Failed: "+fault.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(SignupActivity.this, getString(R.string.failed_registration)+fault.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -113,15 +113,11 @@ public class SignupActivity extends AppCompatActivity {
                 }, 3000);
 
 
-
-        //progressDialog.dismiss();
-        Log.d("TAG", "DIsmiseed progress dialog");
-
     }
 
 
     public void onSignupSuccess() {
-        Toast.makeText(SignupActivity.this,"You are registered!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(SignupActivity.this, R.string.registration_success, Toast.LENGTH_SHORT).show();
         signupButton.setEnabled(true);
         setResult(RESULT_OK, null);
         finish();
@@ -139,21 +135,21 @@ public class SignupActivity extends AppCompatActivity {
         String password = passwordText.getText().toString();
 
         if (name.isEmpty() || name.length() < 3) {
-            usernameText.setError("at least 3 characters");
+            usernameText.setError(getString(R.string.at_least_3));
             valid = false;
         } else {
             usernameText.setError(null);
         }
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            emailText.setError("enter a valid email address");
+            emailText.setError(getString(R.string.enter_valid_email));
             valid = false;
         } else {
             emailText.setError(null);
         }
 
         if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            passwordText.setError("between 4 and 10 alphanumeric characters");
+            passwordText.setError(getString(R.string.between_4_and_10));
             valid = false;
         } else {
             passwordText.setError(null);

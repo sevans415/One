@@ -104,7 +104,7 @@
         app:cpb_textComplete="Complete"
         app:cpb_textError="Error"
         android:layout_gravity="center"
-        app:cpb_textIdle="Go to User's Facebook Page" />
+        app:cpb_textIdle="@string/goto_fb" />
 
 
     <com.dd.CircularProgressButton
@@ -117,7 +117,7 @@
         app:cpb_textComplete="Complete"
         app:cpb_textError="Error"
         android:layout_gravity="center"
-        app:cpb_textIdle="Add to contacts" />
+        app:cpb_textIdle="@string/addto_contacts" />
 
     <com.dd.CircularProgressButton
         android:id="@+id/btnMessages"

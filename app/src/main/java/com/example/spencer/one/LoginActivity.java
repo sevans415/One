@@ -103,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
         facebookFieldMappings.put("id", "fbid");
 
         List<String> permissions = new ArrayList<String>();
-        permissions.add( "email" );
+        permissions.add( getString(R.string.email_string) );
         //permissions.add("picture");
         Backendless.UserService.loginWithFacebookSdk( LoginActivity.this,facebookFieldMappings, permissions,
                 callbackManager,
@@ -112,8 +112,6 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void handleResponse(final BackendlessUser loggedInUser )
                     {
-                        //loggedInUser.setProperty("name", loggedInUser.getEmail());
-                        //Log.d("TAG",loggedInUser.getProperty("name").toString());
                         onLoginSuccess();
                     }
 
@@ -129,7 +127,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void login() {
-        Log.d(TAG, "Login");
+
 
         if (!validate()) {
             onLoginFailed();
@@ -138,29 +136,9 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setIndeterminateProgressMode(true);
         loginButton.setProgress(50);
 
-        //loginButton.setEnabled(false);
-
-        /*final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
-        progressDialog.show();*/
-
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
 
-        /*new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-                        //onLoginSuccess();
-                        // onLoginFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
-                */
-        // moved this ^ from below the backendless login call
-
-        // TODO: Implement your own authentication logic here.
         Backendless.UserService.login(email, password, new AsyncCallback<BackendlessUser>() {
             @Override
             public void handleResponse(BackendlessUser response) {
@@ -181,11 +159,8 @@ public class LoginActivity extends AppCompatActivity {
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == RESULT_OK) {
 
-                // TODO: Implement successful signup logic here
-                // By default we just finish the Activity and log them in automatically
-                Log.d("TAG", "Result received");
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                finish(); // finishes the process, eventually get rid of ^ line, leave
+                finish();
             }
         }
         callbackManager.onActivityResult( requestCode, resultCode, data );
@@ -211,7 +186,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), R.string.failed_login, Toast.LENGTH_LONG).show();
         loginButton.setProgress(-1);
         loginButton.postDelayed(new Runnable() {
             @Override
@@ -230,14 +205,14 @@ public class LoginActivity extends AppCompatActivity {
         String password = passwordText.getText().toString();
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            emailText.setError("enter a valid email address");
+            emailText.setError(getString(R.string.bad_email));
             valid = false;
         } else {
             emailText.setError(null);
         }
 
         if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            passwordText.setError("between 4 and 10 alphanumeric characters");
+            passwordText.setError(getString(R.string.validate_pword));
             valid = false;
         } else {
             passwordText.setError(null);

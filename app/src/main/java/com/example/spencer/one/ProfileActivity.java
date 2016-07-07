@@ -72,7 +72,7 @@ public class ProfileActivity extends AppCompatActivity {
         Backendless.UserService.update(currentUser, new AsyncCallback<BackendlessUser>() {
             @Override
             public void handleResponse(BackendlessUser response) {
-                Toast.makeText(ProfileActivity.this, property+" updated!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProfileActivity.this, property+getString(R.string.profile_updated), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -82,52 +82,6 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-/*
-    private void addNumber(){
-        currentUser.setProperty("Phone_Number", phoneNumber);
-        Backendless.UserService.update(currentUser, new AsyncCallback<BackendlessUser>() {
-            @Override
-            public void handleResponse(BackendlessUser response) {
-                Toast.makeText(ProfileActivity.this, NUMBER_ADDED, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void handleFault(BackendlessFault fault) {
-                Toast.makeText(ProfileActivity.this, ERROR, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void addSnapchat(){
-        currentUser.setProperty("Snapchat", snapchat);
-        Backendless.UserService.update(currentUser, new AsyncCallback<BackendlessUser>() {
-            @Override
-            public void handleResponse(BackendlessUser response) {
-                Toast.makeText(ProfileActivity.this, SNAPCHAT_ADDED, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void handleFault(BackendlessFault fault) {
-                Toast.makeText(ProfileActivity.this, ERROR, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-    private void addEmail(){
-        String email = etEmail.getText().toString();
-        currentUser.setProperty("email", email);
-        Backendless.UserService.update(currentUser, new AsyncCallback<BackendlessUser>() {
-            @Override
-            public void handleResponse(BackendlessUser response) {
-                Toast.makeText(ProfileActivity.this, EMAIL_UPDATED, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void handleFault(BackendlessFault fault) {
-                Toast.makeText(ProfileActivity.this, ERROR, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-    */
 
     public void setHints(){
         Backendless.Persistence.of(Users.class).findById(currentUser.getUserId(), new AsyncCallback<Users>() {
@@ -139,12 +93,12 @@ public class ProfileActivity extends AppCompatActivity {
                     etSnapchat.setHint(cu.getSnapchat());
                 }
                 else{
-                    etSnapchat.setHint("Enter Snapchat");
+                    etSnapchat.setHint(R.string.enter_snapchat_profile);
                 }
                 if(cu.getPhoneNumber()!=null){
                     etPhoneNumber.setHint(cu.getPhoneNumber());
                 }else{
-                    etPhoneNumber.setHint("Enter Phone Number");
+                    etPhoneNumber.setHint(R.string.enter_number);
                 }
             }
 
@@ -174,7 +128,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                     @Override
                     public void handleFault(BackendlessFault fault) {
-                        Toast.makeText(ProfileActivity.this, "Error Logging out", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProfileActivity.this, R.string.logging_out_error, Toast.LENGTH_SHORT).show();
                     }
                 });
                 break;
