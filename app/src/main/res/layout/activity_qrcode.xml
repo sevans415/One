@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,19 +12,50 @@
 
     <com.example.spencer.one.CameraSourcePreview
         android:id="@+id/camerSourcePreview"
-        android:layout_height="300dp"
         android:layout_width="300dp"
-        ></com.example.spencer.one.CameraSourcePreview>
+        android:layout_height="300dp"
+        android:layout_alignParentTop="true">
 
-    <TextView
-        android:id="@+id/tvCode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="23sp"
-        android:text="Empty" />
-    <Button
-        android:text="Add User"
+    </com.example.spencer.one.CameraSourcePreview>
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/addFrand"/>
-</LinearLayout>
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:text="Empty"
+            android:textSize="20sp"
+            android:layout_gravity="center"
+            android:paddingBottom="10dp"
+            android:visibility="invisible" />
+
+        <com.dd.CircularProgressButton
+            android:id="@+id/addFrand"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            app:cpb_textComplete="Complete"
+            app:cpb_textError="Error"
+            app:cpb_textIdle="Add Friend" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

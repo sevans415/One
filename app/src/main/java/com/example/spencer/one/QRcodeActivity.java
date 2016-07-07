@@ -16,6 +16,7 @@ import com.backendless.BackendlessCollection;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
+import com.dd.CircularProgressButton;
 import com.example.spencer.one.model.Friends;
 import com.example.spencer.one.model.Users;
 import com.google.android.gms.vision.CameraSource;
@@ -31,7 +32,7 @@ public class QRcodeActivity extends AppCompatActivity {
     private CameraSourcePreview cameraSourcePreview;
     private CameraSource cameraSource;
     private BarcodeDetector barcodeDetector;
-    private Button qrBtn;
+    private CircularProgressButton qrBtn;
     private String friendID;
 
     @Override
@@ -39,19 +40,23 @@ public class QRcodeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrcode);
         tvCode = (TextView) findViewById(R.id.tvCode);
+        tvCode.setVisibility(View.INVISIBLE);
         cameraSourcePreview = (CameraSourcePreview) findViewById(R.id.camerSourcePreview);
 
         setupBarcodeDetector();
         setupCameraSource();
 
-        qrBtn = (Button) findViewById(R.id.addFrand);
+        qrBtn = (CircularProgressButton) findViewById(R.id.addFrand);
         qrBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                friendID = tvCode.getText().toString();
+                qrBtn.setIndeterminateProgressMode(true);
+                qrBtn.setProgress(50);
                 saveFriend();
+
             }
         });
+
 
 
 
@@ -93,9 +98,9 @@ public class QRcodeActivity extends AppCompatActivity {
                 if (barcodes.size() != 0) {
                     tvCode.post(new Runnable() {    // Use the post method of the TextView
                         public void run() {
-                            tvCode.setText(    // Update the TextView
-                                    barcodes.valueAt(0).displayValue
-                            );
+                            friendID = barcodes.valueAt(0).displayValue;
+                            tvCode.setText("Code found! Click the button");
+                            tvCode.setVisibility(View.VISIBLE);
                         }
                     });
                 }
@@ -103,7 +108,7 @@ public class QRcodeActivity extends AppCompatActivity {
         });
 
         if (!barcodeDetector.isOperational()) {
-            Log.w("TAG_QR", "Detector dependencies are not yet available.");
+            Log.d("TAG_QR", "Detector dependencies are not yet available.");
         }
 
     }
@@ -153,11 +158,13 @@ public class QRcodeActivity extends AppCompatActivity {
                             result.putExtra(AddFriendActivity.CURRENT_USER_ID, friendToAdd.getCurrentUserId());
                             result.putExtra(AddFriendActivity.OBJECT_ID, response.getObjectId());
                             setResult(Activity.RESULT_OK, result);
+                            successEndBtnAnimation();
                             Toast.makeText(QRcodeActivity.this, friendName + " added as a friend", Toast.LENGTH_SHORT).show();
                             finish();
                         }
                         @Override
                         public void handleFault(BackendlessFault fault) {
+                            faultEndBtnAnimation();
                             Toast.makeText(QRcodeActivity.this, "Error saving friend: "+
                                     fault.getMessage(), Toast.LENGTH_SHORT).show();
                             Log.d("TAG", "SAVing friend error: " + fault.getMessage());
@@ -167,8 +174,32 @@ public class QRcodeActivity extends AppCompatActivity {
                 }
             @Override
             public void handleFault(BackendlessFault fault) {
+                faultEndBtnAnimation();
                 Toast.makeText(QRcodeActivity.this, "Error", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void successEndBtnAnimation() {
+        qrBtn.setProgress(100);
+        qrBtn.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                qrBtn.setProgress(0);
+            }
+        }, 300);
+        qrBtn.setEnabled(true);
+    }
+
+    private void faultEndBtnAnimation() {
+        qrBtn.setProgress(-1);
+        qrBtn.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                qrBtn.setProgress(0);
+            }
+        }, 2000);
+
+        qrBtn.setEnabled(true);
     }
 }

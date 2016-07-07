@@ -113,7 +113,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void handleResponse(final BackendlessUser loggedInUser )
                     {
                         //loggedInUser.setProperty("name", loggedInUser.getEmail());
-                        Log.d("TAG",loggedInUser.getProperty("name").toString());
+                        //Log.d("TAG",loggedInUser.getProperty("name").toString());
                         onLoginSuccess();
                     }
 

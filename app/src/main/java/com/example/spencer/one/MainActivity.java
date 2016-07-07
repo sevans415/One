@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, ProfileActivity.class));
                 break;
             case R.id.actionQR:
-                startActivity(new Intent(MainActivity.this, QRcodeActivity.class));
+                startActivityForResult(new Intent(MainActivity.this, QRcodeActivity.class), ADD_FRIEND_REQUEST_CODE);
                 break;
             default:
                 break;

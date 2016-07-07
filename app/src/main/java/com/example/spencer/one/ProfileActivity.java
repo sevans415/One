@@ -141,8 +141,8 @@ public class ProfileActivity extends AppCompatActivity {
                 else{
                     etSnapchat.setHint("Enter Snapchat");
                 }
-                if(cu.getPhone_Number()!=null){
-                    etPhoneNumber.setHint(cu.getPhone_Number());
+                if(cu.getPhoneNumber()!=null){
+                    etPhoneNumber.setHint(cu.getPhoneNumber());
                 }else{
                     etPhoneNumber.setHint("Enter Phone Number");
                 }

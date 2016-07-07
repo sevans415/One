@@ -12,7 +12,7 @@ public class Users extends BackendlessUser {
     private String objectId;
     private String name;
     private String Snapchat;
-    private String Phone_Number;
+    private String phoneNumber;
     private String fbid;
 
     public String getFbid() {
@@ -31,12 +31,12 @@ public class Users extends BackendlessUser {
         this. Snapchat = snapchat;
     }
 
-    public String getPhone_Number() {
-        return Phone_Number;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhone_Number(String phone_Number) {
-        this.Phone_Number = phone_Number;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public Users() {

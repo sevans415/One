@@ -1,8 +1,11 @@
 package com.example.spencer.one;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,16 +46,8 @@ public class MessagesActivity extends AppCompatActivity {
         concatIdOne = friendID + Backendless.UserService.CurrentUser().getObjectId();
         concatIdTwo = Backendless.UserService.CurrentUser().getObjectId() + friendID;
 
-
-        Button btnRefresh = (Button) findViewById(R.id.btnRefresh);
-        btnRefresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                refresh();
-            }
-
-
-        });
+        TextView tvHeader = (TextView) findViewById(R.id.tvHeader);
+        tvHeader.setText("Conversastion with "+friendUsername);
 
         Button btnSend = (Button) findViewById(R.id.btnSendMessage);
         btnSend.setOnClickListener(new View.OnClickListener() {
@@ -128,4 +123,24 @@ public class MessagesActivity extends AppCompatActivity {
 
         Toast.makeText(MessagesActivity.this, "sent", Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_messages,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.btnRefresh:
+                refresh();
+                break;
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }

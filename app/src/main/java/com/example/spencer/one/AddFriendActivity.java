@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -16,17 +15,13 @@ import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
-import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.bumptech.glide.Glide;
+import com.dd.CircularProgressButton;
 import com.example.spencer.one.model.Friends;
 import com.example.spencer.one.model.Users;
-import com.example.spencer.one.recyclerViewItems.FriendsAdapter;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class AddFriendActivity extends AppCompatActivity {
 
@@ -40,6 +35,7 @@ public class AddFriendActivity extends AppCompatActivity {
     private EditText etFriendInput;
     private Spinner querySpinner;
     private ImageView ivQrCode;
+    private CircularProgressButton btnSaveFriend;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +71,7 @@ public class AddFriendActivity extends AppCompatActivity {
         });
 
 
-        Button btnSaveFriend = (Button) findViewById(R.id.btnSaveFriend);
+        btnSaveFriend = (CircularProgressButton) findViewById(R.id.btnSaveFriend);
         btnSaveFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,6 +87,8 @@ public class AddFriendActivity extends AppCompatActivity {
     }
 
     private void saveFriend(String queryType) {
+        btnSaveFriend.setIndeterminateProgressMode(true);
+        btnSaveFriend.setProgress(50);
         final String friendsInfo = etFriendInput.getText().toString();
 
         String whereClause = queryType+" = '"+friendsInfo+"'";
@@ -130,12 +128,18 @@ public class AddFriendActivity extends AppCompatActivity {
                             result.putExtra(FBID,friendToAdd.getFbid());
                             Log.d("TAG", "ADDING FRIEND: "+response.getFbid());
                             setResult(Activity.RESULT_OK, result);
+
+                            successEndButtonAnimation();
+
                             Toast.makeText(AddFriendActivity.this, friendName + " added as a friend", Toast.LENGTH_SHORT).show();
                             finish();
                         }
 
                         @Override
                         public void handleFault(BackendlessFault fault) {
+
+                            faultEndButtonAnimation();
+
                             Toast.makeText(AddFriendActivity.this, "Error saving friend: "+
                                     fault.getMessage(), Toast.LENGTH_SHORT).show();
                             Log.d("TAG", "SAVing friend error: " + fault.getMessage());
@@ -147,11 +151,35 @@ public class AddFriendActivity extends AppCompatActivity {
 
             @Override
             public void handleFault(BackendlessFault fault) {
+                faultEndButtonAnimation();
                 Toast.makeText(AddFriendActivity.this, "Error finding user: "+fault.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.d("TAG","FINDing friend error: "+fault.getMessage());
                 finish();
 
             }
         });
+    }
+
+    private void faultEndButtonAnimation() {
+        btnSaveFriend.setProgress(-1);
+        btnSaveFriend.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                btnSaveFriend.setProgress(0);
+            }
+        }, 500);
+
+        btnSaveFriend.setEnabled(true);
+    }
+
+    private void successEndButtonAnimation() {
+        btnSaveFriend.setProgress(100);
+        btnSaveFriend.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                btnSaveFriend.setProgress(0);
+            }
+        }, 300);
+        btnSaveFriend.setEnabled(true);
     }
 }

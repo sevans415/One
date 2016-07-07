@@ -58,7 +58,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendViewHolder> {
         Log.d("TAG", friendUsername+"adapter: "+friendObject.getFbid());
         if (friendObject.getFbid() == null) {
             Random randomImage = new Random();
-            int n = randomImage.nextInt(4);
+            int n = randomImage.nextInt(9);
             switch (n) {
                 case 0: holder.ivFbPhoto.setImageResource(R.drawable.default0);
                     break;
@@ -67,6 +67,16 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendViewHolder> {
                 case 2: holder.ivFbPhoto.setImageResource(R.drawable.default2);
                     break;
                 case 3: holder.ivFbPhoto.setImageResource(R.drawable.default3);
+                    break;
+                case 4: holder.ivFbPhoto.setImageResource(R.drawable.default4);
+                    break;
+                case 5: holder.ivFbPhoto.setImageResource(R.drawable.default5);
+                    break;
+                case 6: holder.ivFbPhoto.setImageResource(R.drawable.default6);
+                    break;
+                case 7: holder.ivFbPhoto.setImageResource(R.drawable.default7);
+                    break;
+                case 8: holder.ivFbPhoto.setImageResource(R.drawable.default8);
                     break;
             }
 

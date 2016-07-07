@@ -20,6 +20,7 @@ import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.bumptech.glide.Glide;
+import com.dd.CircularProgressButton;
 import com.example.spencer.one.recyclerViewItems.FriendViewHolder;
 import com.example.spencer.one.model.Users;
 
@@ -37,7 +38,7 @@ public class FriendPageActivity extends AppCompatActivity {
     private TextView tvFriendPhoneNumber;
     private Button btnPhoneNumber;
     private Button btnEmail;
-    private Button fbBtn;
+    private CircularProgressButton fbBtn;
     private String fbid;
 
     @Override
@@ -51,9 +52,9 @@ public class FriendPageActivity extends AppCompatActivity {
         tvFriendPhoneNumber = (TextView) findViewById(R.id.tvFriendPhoneNumber);
         btnPhoneNumber = (Button) findViewById(R.id.callClick);
         btnEmail = (Button) findViewById(R.id.emailClick);
-        fbBtn = (Button) findViewById(R.id.goToFb);
+        fbBtn = (CircularProgressButton) findViewById(R.id.goToFb);
 
-        Button btnAddContact = (Button) findViewById(R.id.btnAddContact);
+        CircularProgressButton btnAddContact = (CircularProgressButton) findViewById(R.id.btnAddContact);
         btnAddContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,20 +62,13 @@ public class FriendPageActivity extends AppCompatActivity {
             }
         });
 
-        Button btnMessages = (Button) findViewById(R.id.btnMessages);
+        CircularProgressButton btnMessages = (CircularProgressButton) findViewById(R.id.btnMessages);
         btnMessages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 toMessagesActivity();
             }
         });
-
-
-        ImageView ivFbPhoto = (ImageView) findViewById(R.id.ivFbPhoto);
-        String url = "http://graph.facebook.com/"+fbid+"/picture?type=large";
-        Glide.with(FriendPageActivity.this).load(url).into(ivFbPhoto);
-
-
 
         Bundle friendIdBundle = getIntent().getExtras();
         if (friendIdBundle != null) {
@@ -88,6 +82,18 @@ public class FriendPageActivity extends AppCompatActivity {
         });
 
         getFriendInfo();
+
+        btnEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent emailintent = new Intent(android.content.Intent.ACTION_SEND);
+                emailintent.setType("plain/text");
+                emailintent.putExtra(android.content.Intent.EXTRA_EMAIL,new String[] {friendEmail});
+                emailintent.putExtra(android.content.Intent.EXTRA_SUBJECT, "");
+                emailintent.putExtra(android.content.Intent.EXTRA_TEXT,"");
+                startActivity(Intent.createChooser(emailintent, "Send mail..."));
+            }
+        });
     }
 
     private void toMessagesActivity() {
@@ -114,29 +120,18 @@ public class FriendPageActivity extends AppCompatActivity {
             public void handleResponse(Users response) {
                 friendEmail = response.getEmail();
                 friendName = response.getName();
-                friendPhoneNumber = response.getPhone_Number();
+                friendPhoneNumber = response.getPhoneNumber();
                 fbid = response.getFbid();
 
                 tvFriendUsername.setText(response.getUserName());
                 tvFriendEmail.setText(response.getEmail());
-                btnEmail.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent emailintent = new Intent(android.content.Intent.ACTION_SEND);
-                        emailintent.setType("plain/text");
-                        emailintent.putExtra(android.content.Intent.EXTRA_EMAIL,new String[] {friendEmail});
-                        emailintent.putExtra(android.content.Intent.EXTRA_SUBJECT, "");
-                        emailintent.putExtra(android.content.Intent.EXTRA_TEXT,"");
-                        startActivity(Intent.createChooser(emailintent, "Send mail..."));
-                    }
-                });
                 if (response.getSnapchat() != null) {
                     tvFriendSnapchat.setText(response.getSnapchat());
                 } else {
                     tvFriendSnapchat.setText("No snapchat listed");
                 }
-                if (response.getPhone_Number() != null) {
-                    tvFriendPhoneNumber.setText(response.getPhone_Number());
+                if (response.getPhoneNumber() != null) {
+                    tvFriendPhoneNumber.setText(response.getPhoneNumber());
                     btnPhoneNumber.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -144,7 +139,6 @@ public class FriendPageActivity extends AppCompatActivity {
                             callIntent.setData(Uri.parse("tel:" + friendPhoneNumber));
                             if (ActivityCompat.checkSelfPermission(FriendPageActivity.this, Manifest.permission.CALL_PHONE)
                                     != PackageManager.PERMISSION_GRANTED) {
-                                // TODO: Consider calling
                                 Toast.makeText(FriendPageActivity.this, "Calling Permission Disabled",
                                         Toast.LENGTH_SHORT).show();
                                 return;
